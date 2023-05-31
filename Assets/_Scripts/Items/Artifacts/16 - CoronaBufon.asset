@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e6823b7563c15e44ab4502b3f183117, type: 3}
+  m_Name: 16 - CoronaBufon
+  m_EditorClassIdentifier: 
+  id: 16
+  nameObject: Jester's crown
+  description: "Undead enemies will have half life when you encounter them. Collecting
+    coins will not add gold, but it will have a 25% increase \nwill have a 25% increase
+    of one point in damage, if not increased, that percentage will be added to the
+    next coin you collect."
+  icon: {fileID: 1903436023, guid: b7f6563fd7d1443479f58743d575e279, type: 3}
+  isWeapon: 0

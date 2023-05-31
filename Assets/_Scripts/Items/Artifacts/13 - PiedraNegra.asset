@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2e6823b7563c15e44ab4502b3f183117, type: 3}
+  m_Name: 13 - PiedraNegra
+  m_EditorClassIdentifier: 
+  id: 13
+  nameObject: 'Black Stone '
+  description: Reduces the number of enemies you can encounter by 1 per room.
+  icon: {fileID: -1745278227, guid: 1856cd235fbd46b4abd63c95915f099f, type: 3}
+  isWeapon: 0
