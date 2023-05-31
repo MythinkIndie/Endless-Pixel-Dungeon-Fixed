@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: 12 - Rose Katana
   m_EditorClassIdentifier: 
   id: 12
-  nameObject: 
-  description: 
+  nameObject: Rose Katana
+  description: Applies bleeding, its ability does 120% damage with the next attack,
+    if you kill it with the ability you will have it available again instantly, if
+    not you will have to wait
   icon: {fileID: -238034571, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

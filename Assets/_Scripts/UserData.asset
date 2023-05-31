@@ -15,16 +15,43 @@ MonoBehaviour:
   InitialItems:
   - {fileID: 11400000, guid: 55a6023c3df610c40b62fa3d4ea8a53b, type: 2}
   - {fileID: 11400000, guid: 0063ce5aa1cff40429104fb7169b2111, type: 2}
-  - {fileID: 11400000, guid: 5faffdd879c1bf14a85c7715c28ca7eb, type: 2}
-  - {fileID: 11400000, guid: ae6d53e7725f1cf4fb3acfb64acbc5c6, type: 2}
   - {fileID: 11400000, guid: e2466e422825f9149a5f20f039755641, type: 2}
+  - {fileID: 11400000, guid: 5faffdd879c1bf14a85c7715c28ca7eb, type: 2}
   - {fileID: 11400000, guid: 8afad394f541942498f218e84a94b7f3, type: 2}
+  - {fileID: 11400000, guid: ae6d53e7725f1cf4fb3acfb64acbc5c6, type: 2}
+  - {fileID: 11400000, guid: c60740a184ea1254ebce060c0ad66380, type: 2}
   - {fileID: 11400000, guid: 6f620bf7847dc644bac4329c8735f61b, type: 2}
+  - {fileID: 11400000, guid: d036a1c8dd8070149bc592c604ba9373, type: 2}
   - {fileID: 11400000, guid: 697050adeef958142a69d9ef8e36a989, type: 2}
-  ToGetInGameItems:
-  - {fileID: 11400000, guid: 9a3857d87a6e5474f8ad47f1b2d85b3a, type: 2}
-  - {fileID: 11400000, guid: 1a3e347377fb0e7469f13e19a503efe8, type: 2}
-  - {fileID: 11400000, guid: 03acf41c61ef864448da9540461b749e, type: 2}
-  - {fileID: 11400000, guid: 3c3d23055f1053943a0e241ed40f7c4b, type: 2}
+  - {fileID: 11400000, guid: f58ed40d3d3e35a4fadbb89fc6b98f47, type: 2}
+  - {fileID: 11400000, guid: fcbbb500ef8a66e4ba9cb7ee5c775491, type: 2}
+  - {fileID: 11400000, guid: 6796fce2d4864d649a309b18edc8a461, type: 2}
+  - {fileID: 11400000, guid: 034376d75209c2544bfe07c55af1089a, type: 2}
+  - {fileID: 11400000, guid: 934d0bbed2d67554f9648680e9a89afa, type: 2}
+  - {fileID: 11400000, guid: 5b3ddb9a2767b8243a3e779bd296c14c, type: 2}
+  - {fileID: 11400000, guid: d39e74196dff9d4479c005987923955d, type: 2}
+  - {fileID: 11400000, guid: 322fb72dbec7d4d46911b9443ad0a24e, type: 2}
+  - {fileID: 11400000, guid: 1eb7412ede324de4f8f34d4c5f19ebca, type: 2}
+  - {fileID: 11400000, guid: fc39f82130b6a094b93062ee012e9c24, type: 2}
+  - {fileID: 11400000, guid: a1703b2fd69986a4eb764ae7275fb8e3, type: 2}
+  - {fileID: 11400000, guid: de0a2c1a069bb7e4894b7e7d8b42eac3, type: 2}
+  - {fileID: 11400000, guid: 35dc944f6c7a01d449677987020c5743, type: 2}
+  - {fileID: 11400000, guid: 6fecd55394ae7ba4595900a0587f09a0, type: 2}
+  - {fileID: 11400000, guid: fd47b345a2cfbc2439252632ac35f992, type: 2}
+  - {fileID: 11400000, guid: ada4f2d1844a1de45bd5e3d746131669, type: 2}
+  - {fileID: 11400000, guid: 1172338d7c29da84b85f79cb3eeb55f4, type: 2}
+  - {fileID: 11400000, guid: 3bba3a564bbfdd34db8a07e9ca3dd45a, type: 2}
+  - {fileID: 11400000, guid: f5a0a20f3ecd6ff47b976a11dbecb8d9, type: 2}
+  - {fileID: 11400000, guid: c369c94ab0843894bb2ddb96ea8bec21, type: 2}
   - {fileID: 11400000, guid: 253cd8aa36f1f7745b62dd41953a8c56, type: 2}
+  - {fileID: 11400000, guid: ef537be00b618af4785ac036ba52014d, type: 2}
+  - {fileID: 11400000, guid: 39915ac0150c4c04a98eecfdc97542aa, type: 2}
+  - {fileID: 11400000, guid: 3c3d23055f1053943a0e241ed40f7c4b, type: 2}
+  - {fileID: 11400000, guid: 72be61cd337345549bddd12b1f047142, type: 2}
+  - {fileID: 11400000, guid: 03acf41c61ef864448da9540461b749e, type: 2}
+  - {fileID: 11400000, guid: 1a3e347377fb0e7469f13e19a503efe8, type: 2}
+  - {fileID: 11400000, guid: c67620ad1694a714c9dfa7b85b7abde8, type: 2}
+  - {fileID: 11400000, guid: 9a3857d87a6e5474f8ad47f1b2d85b3a, type: 2}
+  - {fileID: 11400000, guid: 1c9b7612c4544324f829c0b7a8c2f8c7, type: 2}
+  ToGetInGameItems: []
   ArchivementsItems: []

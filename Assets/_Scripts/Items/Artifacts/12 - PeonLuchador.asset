@@ -13,10 +13,9 @@ MonoBehaviour:
   m_Name: 12 - PeonLuchador
   m_EditorClassIdentifier: 
   id: 12
-  nameObject: Pawn fighter
-  description: You create a pawn with 10% of your attributes, it will have your same
-    weapon and, therefore, its effects. When fighting against an enemy, the pawn
-    will also attack and will receive damage until it dies, if it dies, it restarts
-    when passing to the next room.
+  nameObject: Fighter pawn
+  description: You create a pawn with 10% of your attributes. When fighting against
+    an enemy, the pawn will also attack and will receive damage until it dies, if
+    it dies, it restarts when passing to the next room.
   icon: {fileID: 560611410, guid: 1856cd235fbd46b4abd63c95915f099f, type: 3}
   isWeapon: 0

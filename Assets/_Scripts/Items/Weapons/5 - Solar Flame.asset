@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 5 - Solar Flame
   m_EditorClassIdentifier: 
   id: 5
-  nameObject: 
-  description: 
+  nameObject: Solar Flare
+  description: Sends a ray from the sky that damages all visible enemies with 75%
+    of damage. Ray of hope reveals all areas where there are enemies
   icon: {fileID: 1005591241, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

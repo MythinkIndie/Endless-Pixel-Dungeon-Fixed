@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 11 - Chaos Sword
   m_EditorClassIdentifier: 
   id: 11
-  nameObject: 
-  description: 
+  nameObject: Chaos Sword
+  description: Applies curse. Killing a demon will double the power of the next hit,
+    it can break the armor of the enemies you have
   icon: {fileID: -1831769294, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

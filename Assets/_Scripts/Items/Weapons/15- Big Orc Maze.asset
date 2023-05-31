@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 15- Big Orc Maze
   m_EditorClassIdentifier: 
   id: 15
-  nameObject: 
-  description: 
+  nameObject: Big orc maze
+  description: Extra damage to animals, using its ability makes 3 stones fall randomly
+    on enemies, then uncover 3 random squares
   icon: {fileID: -316357760, guid: d69578d031f22024480b96d6b0130db3, type: 3}
   isWeapon: 1

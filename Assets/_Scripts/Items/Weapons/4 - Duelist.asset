@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 4 - Duelist
   m_EditorClassIdentifier: 
   id: 4
-  nameObject: 
-  description: 
+  nameObject: Duelist
+  description: Always will attack first the player, can repel the enemy's blow sometimes
   icon: {fileID: 1317952169, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

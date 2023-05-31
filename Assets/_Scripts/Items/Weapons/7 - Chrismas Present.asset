@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 7 - Chrismas Present
   m_EditorClassIdentifier: 
   id: 7
-  nameObject: 
-  description: 
+  nameObject: Christmas gift
+  description: Has a chance to inflict a random effect to the enemy
   icon: {fileID: -277435132, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

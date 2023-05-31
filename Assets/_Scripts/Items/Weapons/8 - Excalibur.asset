@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 8 - Excalibur
   m_EditorClassIdentifier: 
   id: 8
-  nameObject: 
-  description: 
+  nameObject: Excalivur
+  description: Demons take more damage, apply blessing
   icon: {fileID: -1034194445, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

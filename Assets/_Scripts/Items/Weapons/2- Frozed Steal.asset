@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 2- Frozed Steal
   m_EditorClassIdentifier: 
   id: 2
-  nameObject: Frozed Steal
-  description: 
+  nameObject: Cold edge
+  description: Applies the freezing effect
   icon: {fileID: -471058252, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

@@ -289,9 +289,10 @@ public class InfoUI : MonoBehaviour {
     public void PrintObjectSelected(MythicObject item) {
 
         itemLookingAt = item;
-        NombreObjeto.text = itemLookingAt.nameObject;
-        DescripcionObjeto.text = itemLookingAt.description;
 
+        StopAllCoroutines();
+        StartCoroutine(PrintItemTextDescription());
+        
         if (itemLookingAt.isWeapon) {
 
             if (DatosPlayer.WeaponEquiped == itemLookingAt.id) {
@@ -317,6 +318,22 @@ public class InfoUI : MonoBehaviour {
             }
 
         }
+
+    }
+
+    IEnumerator PrintItemTextDescription() {
+
+        NombreObjeto.text = itemLookingAt.nameObject;
+        DescripcionObjeto.text = "";
+
+        foreach(var character in itemLookingAt.description) {
+
+            DescripcionObjeto.text += character;
+            yield return new WaitForSeconds(1/DatosPlayer.TextSpeed);
+
+        }
+
+        yield return new WaitForSeconds(0.1f);
 
     }
 

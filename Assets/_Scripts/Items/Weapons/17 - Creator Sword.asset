@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 17 - Creator Sword
   m_EditorClassIdentifier: 
   id: 17
-  nameObject: 
-  description: 
+  nameObject: Creator sword
+  description: Its ability copies skills two of other random swords, its damage is
+    increased by 10%
   icon: {fileID: 1419935018, guid: d69578d031f22024480b96d6b0130db3, type: 3}
   isWeapon: 1

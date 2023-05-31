@@ -10,7 +10,6 @@ public class MainMenu : MonoBehaviour {
     [SerializeField] private UserData DatosPlayer;
     int _weaponEquiped;
     int _artifactEquiped;
-    [SerializeField] private List<Button> botonesAOcultar;
 
     void Start() {
 

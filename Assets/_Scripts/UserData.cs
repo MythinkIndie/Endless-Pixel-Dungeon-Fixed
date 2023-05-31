@@ -11,6 +11,7 @@ public class UserData : ScriptableObject {
     int _hp = 0;
     int _gold = -1;
     int _deepest = -1;
+    float _textSpeed = -1f;
 
     int _buildSelected = 1;
     int _weaponEquiped = 0;
@@ -178,6 +179,33 @@ public class UserData : ScriptableObject {
 
             _deepest = value;
             PlayerPrefs.SetInt("USER_DEEPEST", _deepest);
+
+        }
+
+    }
+
+    public float TextSpeed {
+
+        get {
+
+            if (_textSpeed < 1) {
+
+                if (!PlayerPrefs.HasKey("USER_TEXT_SPEED")) {
+
+                    TextSpeed = 100f;
+
+                }
+
+                _textSpeed = PlayerPrefs.GetFloat("USER_TEXT_SPEED");
+
+            }
+
+            return _textSpeed;
+
+        } set {
+
+            _textSpeed = value;
+            PlayerPrefs.SetFloat("USER_TEXT_SPEED", _textSpeed);
 
         }
 
@@ -361,6 +389,7 @@ public class UserData : ScriptableObject {
         _hp = -1;
         _gold = -1;
         _deepest = -1;
+        _textSpeed = -1f;
 
     }
 
@@ -375,6 +404,7 @@ public class UserData : ScriptableObject {
         _hp = HP;
         _gold = Gold;
         _deepest = Deepest;
+        _textSpeed = TextSpeed;
 
     }
 

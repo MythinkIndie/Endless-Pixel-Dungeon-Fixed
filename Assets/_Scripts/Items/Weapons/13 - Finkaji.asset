@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 13
   nameObject: Finkaji
-  description: 
+  description: Freeze and fire at the same time
   icon: {fileID: 1157758894, guid: d69578d031f22024480b96d6b0130db3, type: 3}
   isWeapon: 1

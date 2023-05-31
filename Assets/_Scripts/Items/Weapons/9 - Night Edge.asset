@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 9 - Night Edge
   m_EditorClassIdentifier: 
   id: 9
-  nameObject: 
-  description: 
+  nameObject: Night Abyss
+  description: Unlocks all the squares closed by enemies, also has the ability to
+    give three hits in chain
   icon: {fileID: 1413795706, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

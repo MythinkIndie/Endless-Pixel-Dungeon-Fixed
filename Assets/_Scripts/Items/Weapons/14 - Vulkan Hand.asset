@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: 14 - Vulkan Hand
   m_EditorClassIdentifier: 
   id: 14
-  nameObject: 
-  description: 
+  nameObject: Hand of the volcano
+  description: Has the ability to burn the entire visible room, this will do half
+    the damage you have and apply burns. You need to kill 5 enemies to be able to
+    reuse
   icon: {fileID: 397477763, guid: d69578d031f22024480b96d6b0130db3, type: 3}
   isWeapon: 1

@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 18
   nameObject: Pochita Chainsaw
-  description: 
+  description: Applies bleeding. For every 3 enemies defeated you will accumulate
+    a bag of blood, this will be consumed when the life reaches zero to revive.
   icon: {fileID: -1328828684, guid: d69578d031f22024480b96d6b0130db3, type: 3}
   isWeapon: 1

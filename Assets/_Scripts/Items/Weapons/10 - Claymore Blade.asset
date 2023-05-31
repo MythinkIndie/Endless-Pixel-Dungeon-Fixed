@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: 10 - Claymore Blade
   m_EditorClassIdentifier: 
   id: 10
-  nameObject: 
-  description: 
+  nameObject: Claimore's Blade
+  description: Hits with 125% of its strength. In case you have nerfs, it removes
+    one of them
   icon: {fileID: -1744552654, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

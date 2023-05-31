@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: 3 - Corrosibe Maze
   m_EditorClassIdentifier: 
   id: 3
-  nameObject: 
-  description: 
+  nameObject: Corrosive mace
+  description: Applies poison, does not affect demons
   icon: {fileID: 1340923399, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

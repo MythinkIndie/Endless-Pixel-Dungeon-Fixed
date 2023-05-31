@@ -14,9 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 16
   nameObject: Jester's crown
-  description: "Undead enemies will have half life when you encounter them. Collecting
-    coins will not add gold, but it will have a 25% increase \nwill have a 25% increase
-    of one point in damage, if not increased, that percentage will be added to the
-    next coin you collect."
+  description: Undead enemies will have half life when you encounter them. Collecting
+    coins will not add gold, but it will have a 25% increase of one point in damage,
+    if not increased, that percentage will be added to the next coin you collect.
   icon: {fileID: 1903436023, guid: b7f6563fd7d1443479f58743d575e279, type: 3}
   isWeapon: 0
