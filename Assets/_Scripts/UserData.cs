@@ -12,6 +12,8 @@ public class UserData : ScriptableObject {
     int _gold = -1;
     int _deepest = -1;
     float _textSpeed = -1f;
+    float _musicVolume = -1f;
+    float _fbxVolume = -1f;
 
     int _buildSelected = 1;
     int _weaponEquiped = 0;
@@ -211,6 +213,60 @@ public class UserData : ScriptableObject {
 
     }
 
+    public float MusicVolume {
+
+        get {
+
+            if (_musicVolume < 0) {
+
+                if (!PlayerPrefs.HasKey("USER_MUSIC")) {
+
+                    MusicVolume = 100f;
+
+                }
+
+                _musicVolume = PlayerPrefs.GetFloat("USER_MUSIC");
+
+            }
+
+            return _musicVolume;
+
+        } set {
+
+            _musicVolume = value;
+            PlayerPrefs.SetFloat("USER_MUSIC", _musicVolume);
+
+        }
+
+    }
+
+    public float FbxVolume {
+
+        get {
+
+            if (_fbxVolume < 0) {
+
+                if (!PlayerPrefs.HasKey("USER_FBX")) {
+
+                    FbxVolume = 100f;
+
+                }
+
+                _fbxVolume = PlayerPrefs.GetFloat("USER_FBX");
+
+            }
+
+            return _fbxVolume;
+
+        } set {
+
+            _fbxVolume = value;
+            PlayerPrefs.SetFloat("USER_FBX", _fbxVolume);
+
+        }
+
+    }
+
     public int Build {
 
         get {
@@ -390,6 +446,8 @@ public class UserData : ScriptableObject {
         _gold = -1;
         _deepest = -1;
         _textSpeed = -1f;
+        _musicVolume = -1f;
+        _fbxVolume = -1f;
 
     }
 
@@ -405,6 +463,8 @@ public class UserData : ScriptableObject {
         _gold = Gold;
         _deepest = Deepest;
         _textSpeed = TextSpeed;
+        _musicVolume = MusicVolume;
+        _fbxVolume = FbxVolume;
 
     }
 

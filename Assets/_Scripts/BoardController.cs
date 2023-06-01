@@ -463,6 +463,8 @@ public class BoardController : MonoBehaviour {
 
             int DefenseValue = haveArmorShield(cell);
 
+            //Aqui para arreglar el bug
+
             _playerHealth = Mathf.Max(0, _playerHealth - cell.Enemy.Attack);
             BuffHealth.GetComponent<BuffBenefits>().SetData(-cell.Enemy.Attack);
             cell.Enemy.Health = Mathf.Max(0, cell.Enemy.Health + DefenseValue - _playerAttack);
