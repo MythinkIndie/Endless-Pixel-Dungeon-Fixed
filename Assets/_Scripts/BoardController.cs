@@ -120,21 +120,24 @@ public class BoardController : MonoBehaviour {
         canvaGame.SetActive(false);
         gridGO.SetActive(false);
 
-        yield return new WaitForSeconds(0.2f);
+        yield return new WaitForSeconds(0.1f);
 
-        imageAnimation.transform.DOMoveY(canvaAnimation.GetComponent<RectTransform>().rect.height * 1.5f, 1.5f, false);
+        gridGO.SetActive(true);
+        gridGO.transform.DOMove(new Vector3(4.42f, -20f, 0f), 0f);
+        imageAnimation.transform.DOMoveY(canvaAnimation.GetComponent<RectTransform>().rect.height * 1.5f, 1.5f, false).SetEase(Ease.InOutQuad);
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(0.5f);
+
+        gridGO.transform.DOMove(new Vector3(4.42f, 4.5f, 0f), 1f).SetEase(Ease.OutQuad);
+
+        yield return new WaitForSeconds(1f);
 
         canvaAnimation.SetActive(false);
         canvaGame.SetActive(true);
-        gridGO.SetActive(true);
 
         //canvaGame.GetComponent<CanvasGroup>().DOFade(0f, 0f);
         //canvaGame.GetComponent<CanvasGroup>().DOFade(1f, 0.3f);
         //Hacer que la mazmorra caiga
-        //gridGO.DOFade(0f, 0f);
-        //gridGO.DOFade(1f, 0.3f);
 
     }
 
@@ -150,7 +153,7 @@ public class BoardController : MonoBehaviour {
 
         var pos = _camara.ScreenToWorldPoint(touchedPos.Value);
         //Debug.Log(pos.x + " " + pos.y);
-        bool inBounds = pos.x > -0.5f && pos.x < boardSizeCol && pos.y > -0.5f && pos.y < boardSizeFil;
+        bool inBounds = pos.x > -0.5f && pos.x < boardSizeCol && pos.y > 1.5f && pos.y < boardSizeFil + 2;
         
         if (!inBounds) {
 
@@ -171,10 +174,10 @@ public class BoardController : MonoBehaviour {
 
             for (int x = 0; x < boardSizeCol; ++x) {
 
-                var cell = new Cell(x, y);
+                var cell = new Cell(x, y + 2);
                 data.Add(cell);
 
-                if (oldExit != null && oldExit.Pos.x == x && oldExit.Pos.y == y) {
+                if (oldExit != null && oldExit.Pos.x == x && oldExit.Pos.y == y + 2) {
 
                     cell.Type = CellType.Entrance;
 
@@ -465,8 +468,17 @@ public class BoardController : MonoBehaviour {
 
             //Aqui para arreglar el bug
 
+            if (_playerHealth - cell.Enemy.Attack < 0) {
+
+                BuffHealth.GetComponent<BuffBenefits>().SetData(-_playerHealth);
+
+            } else {
+
+                BuffHealth.GetComponent<BuffBenefits>().SetData(-cell.Enemy.Attack);
+
+            }
+
             _playerHealth = Mathf.Max(0, _playerHealth - cell.Enemy.Attack);
-            BuffHealth.GetComponent<BuffBenefits>().SetData(-cell.Enemy.Attack);
             cell.Enemy.Health = Mathf.Max(0, cell.Enemy.Health + DefenseValue - _playerAttack);
             UpdateUI();
             var ui = GetEnemyUI(x, y);
@@ -517,7 +529,7 @@ public class BoardController : MonoBehaviour {
 
         }
 
-        if (y > 0) {
+        if (y > 2) {
 
             positions.Add(new Vector2Int(x, y - 1));
 
@@ -529,7 +541,7 @@ public class BoardController : MonoBehaviour {
 
         }
 
-        if (y < boardSizeFil - 1) {
+        if (y < boardSizeFil + 1) {
 
             positions.Add(new Vector2Int(x, y + 1));
 
@@ -537,25 +549,25 @@ public class BoardController : MonoBehaviour {
 
         //Diagonales
 
-        if (x > 0 && y > 0) {
+        if (x > 0 && y > 2) {
 
             positions.Add(new Vector2Int(x - 1, y - 1));
 
         }
 
-        if (x < boardSizeCol - 1 && y < boardSizeFil - 1) {
+        if (x < boardSizeCol - 1 && y < boardSizeFil + 1) {
 
             positions.Add(new Vector2Int(x + 1, y + 1));
 
         }
 
-        if (x < boardSizeCol - 1 && y > 0) {
+        if (x < boardSizeCol - 1 && y > 2) {
 
             positions.Add(new Vector2Int(x + 1, y - 1));
 
         }
 
-        if (x > 0 && y < boardSizeFil - 1) {
+        if (x > 0 && y < boardSizeFil + 1) {
 
             positions.Add(new Vector2Int(x - 1, y + 1));
 

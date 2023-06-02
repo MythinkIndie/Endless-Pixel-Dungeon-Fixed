@@ -64,8 +64,8 @@ public class MainMenuSettings : MonoBehaviour {
 
     private void AnimationDownSettings() {
 
-        BackgroundSettings.DOAnchorPos(new Vector2(0,-2500), 0.6f, false).SetEase(Ease.OutBounce);
-        AllSettingOptions.DOAnchorPos(new Vector2(0,-2500), 0.6f, false).SetEase(Ease.OutBounce);
+        BackgroundSettings.DOAnchorPos(new Vector2(0,-2500), 0.6f, false).SetEase(Ease.InQuad);
+        AllSettingOptions.DOAnchorPos(new Vector2(0,-2500), 0.6f, false).SetEase(Ease.InQuad);
         StartCoroutine(SettingDown());
 
     }
