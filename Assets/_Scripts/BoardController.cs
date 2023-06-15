@@ -77,6 +77,9 @@ public class BoardController : MonoBehaviour {
     [SerializeField] private GameObject BuffAtk;
     [SerializeField] private GameObject BuffCoins;
 
+    [SerializeField] private Image bloodScreen;
+    [SerializeField] private Image bloodScreenBounds;
+
     Camera _camara;
     List<Cell> _board = new List<Cell>();
     List<AttackDefenseView> _enemyUi = new List<AttackDefenseView>();
@@ -162,6 +165,8 @@ public class BoardController : MonoBehaviour {
         }
 
         CellTouched(Mathf.FloorToInt(pos.x + 0.5f), Mathf.FloorToInt(pos.y + 0.5f));
+
+        
 
     }
 
@@ -372,6 +377,7 @@ public class BoardController : MonoBehaviour {
 
             case CellType.Wall:
 
+                SuperTop.SetTile(SuperTop.WorldToCell(new Vector3(cell.Pos.x, cell.Pos.y)), null);
                 Top.SetTile(Top.WorldToCell(new Vector3(cell.Pos.x, cell.Pos.y)), WallTile);
                 break;
 
@@ -508,11 +514,25 @@ public class BoardController : MonoBehaviour {
 
                 }
 
-            } 
+            }
+
+            float alphaColor = Mathf.Abs(((float)_playerHealth / (float)_maxPlayerHealth) - 1f)/18;
+            Color color = bloodScreen.color;
+            color.a = alphaColor;
+            bloodScreen.color = color;
+            color.a = alphaColor * 1.8f;
+            bloodScreenBounds.color = color;
 
         } else {
 
-                PickupItem(cell);
+            PickupItem(cell);
+
+            float alphaColor = Mathf.Abs(((float)_playerHealth / (float)_maxPlayerHealth) - 1f)/18;
+            Color color = bloodScreen.color;
+            color.a = alphaColor;
+            bloodScreen.color = color;
+            color.a = alphaColor * 1.8f;
+            bloodScreenBounds.color = color;
 
         }
         
