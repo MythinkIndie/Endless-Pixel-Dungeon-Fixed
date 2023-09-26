@@ -11,7 +11,7 @@ public class UserData : ScriptableObject {
     int _hp = 0;
     int _gold = -1;
     int _deepest = -1;
-    float _textSpeed = -1f;
+    int _textSpeed = -1;
     float _musicVolume = -1f;
     float _fbxVolume = -1f;
 
@@ -186,7 +186,7 @@ public class UserData : ScriptableObject {
 
     }
 
-    public float TextSpeed {
+    public int TextSpeed {
 
         get {
 
@@ -194,11 +194,11 @@ public class UserData : ScriptableObject {
 
                 if (!PlayerPrefs.HasKey("USER_TEXT_SPEED")) {
 
-                    TextSpeed = 100f;
+                    TextSpeed = 100;
 
                 }
 
-                _textSpeed = PlayerPrefs.GetFloat("USER_TEXT_SPEED");
+                _textSpeed = PlayerPrefs.GetInt("USER_TEXT_SPEED");
 
             }
 
@@ -207,7 +207,7 @@ public class UserData : ScriptableObject {
         } set {
 
             _textSpeed = value;
-            PlayerPrefs.SetFloat("USER_TEXT_SPEED", _textSpeed);
+            PlayerPrefs.SetInt("USER_TEXT_SPEED", _textSpeed);
 
         }
 
@@ -445,7 +445,7 @@ public class UserData : ScriptableObject {
         _hp = -1;
         _gold = -1;
         _deepest = -1;
-        _textSpeed = -1f;
+        _textSpeed = -1;
         _musicVolume = -1f;
         _fbxVolume = -1f;
 

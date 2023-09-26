@@ -14,6 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 1
   nameObject: Flaming sword
-  description: Applies burning to enemies that are not  undead
+  description: Applies burning to enemies that are not undead
   icon: {fileID: -218538509, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

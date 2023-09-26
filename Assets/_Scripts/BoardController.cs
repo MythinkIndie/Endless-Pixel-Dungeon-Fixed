@@ -1,3 +1,4 @@
+using System.Linq;
 using System.Collections.Generic;
 using System.Collections;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class BoardController : MonoBehaviour {
     [SerializeField] private GameObject imageAnimation;
     [SerializeField] private GameObject canvaGame;
     [SerializeField] private GameObject gridGO;
+    [SerializeField] private GameObject enemyListLayer;
 
     [SerializeField] private UserData DatosPlayer;
     [SerializeField] private TMPro.TMP_Text PLayerAttackText;
@@ -65,6 +67,7 @@ public class BoardController : MonoBehaviour {
 
     //EnemyPrefab
     [SerializeField] public AttackDefenseView EnemyUIPrefab;
+    [SerializeField] public EnemyPrefabListItem enemyPrefabListItem;
 
     //Button Exit
     [SerializeField] private Button exitMain;
@@ -80,6 +83,13 @@ public class BoardController : MonoBehaviour {
     [SerializeField] private Image bloodScreen;
     [SerializeField] private Image bloodScreenBounds;
 
+    [SerializeField] private GameObject particlesPrefab;
+    [SerializeField] private GameObject particlesContainer;
+    [SerializeField] private GameObject InventoryItemsBox;
+
+    [SerializeField] private GameObject skillPrefab;
+    [SerializeField] private GameObject skillLayer;
+
     Camera _camara;
     List<Cell> _board = new List<Cell>();
     List<AttackDefenseView> _enemyUi = new List<AttackDefenseView>();
@@ -91,6 +101,9 @@ public class BoardController : MonoBehaviour {
     int _maxPlayerHealth = 0;
     int _playerAttack = 0;
     int _playerLuck = 0;
+    float _maxBloodScreen = 0;
+    bool isDoingCoroutine = false;
+    bool isBreathing = true;
     private bool _WasGenerated = false;
 
     void Awake() {
@@ -99,7 +112,6 @@ public class BoardController : MonoBehaviour {
 
     }
 
-    // Start is called before the first frame update
     void Start() {
 
         exitMain.onClick.AddListener(() => OpenExitConfirmation());
@@ -113,6 +125,9 @@ public class BoardController : MonoBehaviour {
         _maxPlayerHealth = DatosPlayer.HP;
         PLayerMaxHealthText.text = "/ " + _maxPlayerHealth.ToString();
         _floorsDeep = 0;
+        InventoryItemsBox.transform.GetChild(0).GetComponent<Image>().color = new Color(0.537255f, 0.537255f, 0.537255f, 0.313725f);
+        InventoryItemsBox.transform.GetChild(1).GetComponent<Image>().color = new Color(0.537255f, 0.537255f, 0.537255f, 0.313725f);
+        WeaponSkillsSetUpData();
         GenerateRandomMap();
         StartCoroutine(AnimationGameStart());
 
@@ -166,7 +181,56 @@ public class BoardController : MonoBehaviour {
 
         CellTouched(Mathf.FloorToInt(pos.x + 0.5f), Mathf.FloorToInt(pos.y + 0.5f));
 
-        
+    }
+
+    void LateUpdate() {
+
+        if (!isDoingCoroutine) {
+
+            isDoingCoroutine = true;
+
+            if (isBreathing) {
+
+                StartCoroutine(GoToAlpha());
+
+            } else {
+
+                StartCoroutine(GoToAlpha());
+
+            }
+
+        }
+
+    }
+
+    IEnumerator GoToAlpha() {
+
+        Color blood = bloodScreen.color;
+        Color bounds = bloodScreenBounds.color;
+
+        if (isBreathing) {
+
+            blood.a = _maxBloodScreen - 0.01f;
+            bounds.a = (_maxBloodScreen - 0.01f) * 1.8f;
+            bloodScreen.color = blood;
+            bloodScreenBounds.color = bounds;
+            yield return new WaitForSeconds(0.8f);
+
+        } else {
+
+            blood.a += _maxBloodScreen;
+            bounds.a += _maxBloodScreen * 1.8f;
+            bloodScreen.color = blood;
+            bloodScreenBounds.color = bounds;
+            yield return new WaitForSeconds(0.8f);
+
+        }
+
+        isBreathing = bloodScreen.color.a>=_maxBloodScreen?true:false;
+        //Debug.Log(isBreathing);
+
+        isDoingCoroutine = false;
+        yield return new WaitForSeconds(0.2f);
 
     }
 
@@ -296,6 +360,7 @@ public class BoardController : MonoBehaviour {
         }
 
         _inventory.Clear();
+        InventoryItemsBox.transform.GetChild(0).GetComponent<Image>().color = new Color(0.537255f, 0.537255f, 0.537255f, 0.313725f);
         _board.Clear();
         _board.AddRange(levelData);
         foreach (var c in levelData) {
@@ -310,6 +375,12 @@ public class BoardController : MonoBehaviour {
             eui.gameObject.SetActive(false);
             eui.BoardPos = new Vector2Int(-1, -1);
 
+        }
+
+        foreach (Transform child in enemyListLayer.transform) {
+
+            Destroy(child.gameObject);
+                
         }
 
     }
@@ -332,6 +403,7 @@ public class BoardController : MonoBehaviour {
                 if (cell.isRevelated) {
 
                     Top.SetTile(Top.WorldToCell(new Vector3(cell.Pos.x, cell.Pos.y)), null);
+                    
 
                 } else if (cell.Locks > 0) {
 
@@ -351,7 +423,6 @@ public class BoardController : MonoBehaviour {
                     } else if (tileRandom > 20) {
 
                         tile = NormalTileBroked1;
-
 
                     } else if (tileRandom > 10) {
 
@@ -448,6 +519,7 @@ public class BoardController : MonoBehaviour {
         if (!cell.isRevelated) {
 
             cell.isRevelated = true;
+            
             if (cell.Enemy != null) {
 
                 var neighbours = GetNeighbours(x, y);
@@ -461,34 +533,75 @@ public class BoardController : MonoBehaviour {
                     }
 
                 }
+
                 var ui = GetEnemyUI(x, y);
                 ui.SetData(cell.Enemy.Attack, cell.Enemy.Health, cell.Enemy.EnemySprite, false);
+                var enemyElement = Instantiate(enemyPrefabListItem, enemyListLayer.transform);
+                enemyElement.SetData(ui, x, y, -1, haveArmorShield(cell));
 
             }
 
             SetCellView(cell);
 
+            /*var alrededor = GetNeighbours(x, y);
+            var adjacents = alrededor.FindAll(c => c.Pos.x == cell.Pos.x || c.Pos.y == cell.Pos.y);
+            var availableToPrint = adjacents.FindAll(c => !c.isRevelated && c.Type != CellType.Entrance && c.Type != CellType.Wall && c.Locks == 0);
+
+            if (availableToPrint.Count > 0) {
+
+                foreach (var p in availableToPrint) {
+
+                    particlesContainer = Instantiate(particlesPrefab, new Vector3(p.Pos.x, p.Pos.y, 0), new Quaternion(180, 0, 0, 1));
+
+                }
+
+            }*/
+
+            
+
         } else if (cell.Enemy != null) {
 
-            int DefenseValue = haveArmorShield(cell);
+            if (cell.Enemy.States.Where(s => s == StateOfCharacter.Freezed).Count() >= 1 && !cell.Enemy.WasFreezed) {
 
-            //Aqui para arreglar el bug
-
-            if (_playerHealth - cell.Enemy.Attack < 0) {
-
-                BuffHealth.GetComponent<BuffBenefits>().SetData(-_playerHealth);
+                cell.Enemy.WasFreezed = true;
 
             } else {
 
-                BuffHealth.GetComponent<BuffBenefits>().SetData(-cell.Enemy.Attack);
+                int hitForPlayer = DamageForPlayer(cell);
+
+                if (_weaponEquiped == 19) {
+
+                    hitForPlayer = Mathf.Clamp(hitForPlayer - 2, 0, 9999);
+
+                }
+
+                if (_playerHealth - hitForPlayer < 0) {
+
+                    BuffHealth.GetComponent<BuffBenefits>().SetData(-_playerHealth);
+
+                } else {
+
+                    BuffHealth.GetComponent<BuffBenefits>().SetData(-hitForPlayer);
+
+                }
+
+                _playerHealth = Mathf.Max(0, _playerHealth - hitForPlayer);
 
             }
-
-            _playerHealth = Mathf.Max(0, _playerHealth - cell.Enemy.Attack);
-            cell.Enemy.Health = Mathf.Max(0, cell.Enemy.Health + DefenseValue - _playerAttack);
+            cell.Enemy.Health = Mathf.Max(0, cell.Enemy.Health - DamageForEnemy(cell));
             UpdateUI();
             var ui = GetEnemyUI(x, y);
             ui.SetData(cell.Enemy.Attack, cell.Enemy.Health, cell.Enemy.EnemySprite, true);
+
+            foreach (Transform child in enemyListLayer.transform) {
+
+                if (child.gameObject.GetComponent<EnemyPrefabListItem>().x == x && child.gameObject.GetComponent<EnemyPrefabListItem>().y == y){
+
+                    child.gameObject.GetComponent<EnemyPrefabListItem>().SetData(ui, x, y, (cell.Enemy.States.Count == 0?-1:(int)cell.Enemy.States.First()), haveArmorShield(cell));
+                
+                }
+                
+            }
 
             if (_playerHealth <= 0) {
 
@@ -516,23 +629,18 @@ public class BoardController : MonoBehaviour {
 
             }
 
-            float alphaColor = Mathf.Abs(((float)_playerHealth / (float)_maxPlayerHealth) - 1f)/18;
+            StopAllCoroutines();
+            _maxBloodScreen = Mathf.Abs(((float)_playerHealth / (float)_maxPlayerHealth) - 1f)/20;
             Color color = bloodScreen.color;
-            color.a = alphaColor;
+            color.a = _maxBloodScreen;
             bloodScreen.color = color;
-            color.a = alphaColor * 1.8f;
+            color.a = _maxBloodScreen * 1.8f;
             bloodScreenBounds.color = color;
+            isDoingCoroutine = false;
 
         } else {
 
             PickupItem(cell);
-
-            float alphaColor = Mathf.Abs(((float)_playerHealth / (float)_maxPlayerHealth) - 1f)/18;
-            Color color = bloodScreen.color;
-            color.a = alphaColor;
-            bloodScreen.color = color;
-            color.a = alphaColor * 1.8f;
-            bloodScreenBounds.color = color;
 
         }
         
@@ -636,6 +744,7 @@ public class BoardController : MonoBehaviour {
                 cell.Item = ItemType.None;
                 _inventory.Add(ItemType.Key);
                 SetCellView(cell);
+                InventoryItemsBox.transform.GetChild(0).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
                 var exit = _board.Find(c => c.Item == ItemType.Exit);
                 if (exit != null) {
 
@@ -669,9 +778,19 @@ public class BoardController : MonoBehaviour {
                         BuffHealth.GetComponent<BuffBenefits>().SetData(cure);
 
                     }
+
                     UpdateUI();
                     cell.Item = ItemType.None;
                     SetCellView(cell);
+
+                    StopAllCoroutines();
+                    _maxBloodScreen = Mathf.Abs(((float)_playerHealth / (float)_maxPlayerHealth) - 1f)/20;
+                    Color color = bloodScreen.color;
+                    color.a = _maxBloodScreen;
+                    bloodScreen.color = color;
+                    color.a = _maxBloodScreen * 1.8f;
+                    bloodScreenBounds.color = color;
+                    isDoingCoroutine = false;
                 }
                 break;
             
@@ -696,6 +815,16 @@ public class BoardController : MonoBehaviour {
                     UpdateUI();
                     cell.Item = ItemType.None;
                     SetCellView(cell);
+
+                    StopAllCoroutines();
+                    _maxBloodScreen = Mathf.Abs(((float)_playerHealth / (float)_maxPlayerHealth) - 1f)/20;
+                    Color color = bloodScreen.color;
+                    color.a = _maxBloodScreen;
+                    bloodScreen.color = color;
+                    color.a = _maxBloodScreen * 1.8f;
+                    bloodScreenBounds.color = color;
+                    isDoingCoroutine = false;
+
                 }
                 break;
 
@@ -745,22 +874,9 @@ public class BoardController : MonoBehaviour {
                 UpdateUI();
                 cell.Item = ItemType.None;
                 SetCellView(cell);
+                InventoryItemsBox.transform.GetChild(1).GetComponent<Image>().color = new Color(1f, 1f, 1f, 1f);
                 break; 
 
-
-        }
-
-    }
-
-    int haveArmorShield(Cell cell) {
-
-        if ((cell.Enemy.SpecificEnemy >= 8) && (cell.Enemy.SpecificEnemy <= 10) || cell.Enemy.SpecificEnemy == 30 || cell.Enemy.SpecificEnemy == 32) {
-
-            return 1;
-
-        } else {
-
-            return 0;
 
         }
 
@@ -781,5 +897,329 @@ public class BoardController : MonoBehaviour {
         _panelPopup = false;
 
     }
+
+    //Skills Scripting
+
+    private void WeaponSkillsSetUpData() {
+
+        int[] skillsToPrint = new int[2];
+
+        switch(_weaponEquiped) {
+
+            case 5:
+            //Rayo Solar
+                skillsToPrint[0] = 0;
+                skillsToPrint[1] = -1;
+                break;
+            case 9:
+            //3 golpes en cadena night abyss
+                skillsToPrint[0] = 1;
+                skillsToPrint[1] = -1;
+                break;
+            case 10:
+            //Remueve nerfeos
+                skillsToPrint[0] = 2;
+                skillsToPrint[1] = -1;
+                break;
+            case 12:
+            //Golpe más potente, si mata al instante reset
+                skillsToPrint[0] = 3;
+                skillsToPrint[1] = -1;
+                break;
+            case 14:
+            //Quema la habitacion entera
+                skillsToPrint[0] = 4;
+                skillsToPrint[1] = -1;
+                break;
+            case 15:
+            //Rompe el techo y tira piedras
+                skillsToPrint[0] = 5;
+                skillsToPrint[1] = -1;
+                break;
+            case 19:
+            //Super golpe
+                skillsToPrint[0] = 6;
+                skillsToPrint[1] = -1;
+                break;
+            case 17:
+            //Revisar ya que sera el más random y puede dar problemas
+            //Imagenes de ejemplo solo
+                skillsToPrint[0] = 7;
+                skillsToPrint[1] = 8;
+                break;
+            default:
+                skillsToPrint[0] = -1;
+                skillsToPrint[1] = -1;
+                break;
+
+        }
+
+        if (skillsToPrint[0] != -1) {
+
+            var newPrefabSkill = Instantiate(skillPrefab, skillLayer.transform);
+            newPrefabSkill.GetComponent<Skill>().SetSkillData(_weaponEquiped, skillsToPrint[0], 4);
+
+        }
+
+        if (skillsToPrint[1] != -1) {
+
+            var newPrefabSkill = Instantiate(skillPrefab, skillLayer.transform);
+            newPrefabSkill.GetComponent<Skill>().SetSkillData(_weaponEquiped, skillsToPrint[1], 4);
+
+        }
+
+    }
+
+    int breakArmor = 0;
+    bool lastHitKillDemon = false;
+
+    private int DamageForEnemy(Cell cell) {
+
+        //Debug.Log(DamageWithWeapon(cell));
+        Debug.Log(DamageForStatus(cell));
+        Debug.Log(cell.Enemy.TypeOfEnemy);
+        //Debug.Log(breakArmor);
+
+        int DamageValue = Mathf.FloorToInt(Mathf.FloorToInt(_playerAttack * DamageWithWeapon(cell)) + DamageForStatus(cell)) - (haveArmorShield(cell)?Mathf.Clamp(Mathf.FloorToInt(cell.Enemy.Health * 0.1f) - breakArmor, 0, 9999):0);
+
+        //Curses Bane pasive
+        if (DamageValue >= cell.Enemy.Health && cell.Enemy.TypeOfEnemy == Specie.Undead && _weaponEquiped == 6) {
+
+            int cure = Mathf.FloorToInt(_maxPlayerHealth * 0.1f);
+
+            if (_playerHealth + cure > _maxPlayerHealth) {
+
+                BuffHealth.GetComponent<BuffBenefits>().SetData(_maxPlayerHealth - _playerHealth);
+                _playerHealth = _maxPlayerHealth;
+
+            } else {
+
+                _playerHealth += cure;
+                BuffHealth.GetComponent<BuffBenefits>().SetData(cure);
+
+            }
+
+        }
+
+        if (DamageValue >= cell.Enemy.Health && cell.Enemy.TypeOfEnemy == Specie.Demon && _weaponEquiped == 11) {
+
+            lastHitKillDemon = true;
+
+        }
+
+        return DamageValue;
+
+    }
+
+    private int DamageForPlayer(Cell cell) {
+
+        int cure = 0;
+
+        if (0 >= cell.Enemy.Health && cell.Enemy.TypeOfEnemy == Specie.Undead && _weaponEquiped == 6) {
+
+            cure = Mathf.FloorToInt(_maxPlayerHealth * 0.1f);
+
+        }
+
+        //Acabar de hacer
+        if (_weaponEquiped == 16) {
+
+            return Mathf.FloorToInt(cell.Enemy.Attack * 1.5f) - cure;
+
+        } else if (_weaponEquiped == 19) {
+
+            return Mathf.Clamp(cell.Enemy.Attack - 2, 1, 9999) - cure;
+
+        } else {
+
+            return cell.Enemy.Attack - cure;
+
+        }
+
+    }
+
+    private float DamageWithWeapon(Cell cell) {
+
+        //TODO
+        // Duelista
+        // Rose Katana
+        // Creator Sword
+        // Pochita
+        // Royal Edge
+
+        switch (_weaponEquiped) {
+
+            case 1:
+                
+                cell.Enemy.TryToAddState(StateOfCharacter.Fired);
+                break;
+            
+            case 2:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Freezed);
+                break;
+
+            case 3:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Poisoned);
+                break;
+
+            case 6:
+
+                if (cell.Enemy.TypeOfEnemy == Specie.Undead) {
+
+                    return 1.5f;
+
+                }
+
+                break;
+            
+            case 7:
+
+                if (cell.Enemy.States.Count == 0) {
+
+                    cell.Enemy.TryToAddState((StateOfCharacter)Random.Range(0, 5));
+
+                }                
+
+                break;
+
+            case 8:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Blessing);
+
+                if (cell.Enemy.TypeOfEnemy == Specie.Demon) {
+
+                    return 1.4f;
+
+                }
+
+                break;
+
+            case 10:
+
+                return 1.25f;
+
+            case 11:
+
+                breakArmor = Random.Range(0, 3);
+
+                if (lastHitKillDemon) {
+
+                    lastHitKillDemon = false;
+                    return 2f;
+
+                }
+                
+                break;
+
+            case 12:
+
+                // Si tiene la habilidad activada, el golpe hace el 1.2f
+                // Si no mata el enemigo con la habilidad activa, hay que ponerlo en cooldown
+                //return 1.2f;
+                break;
+
+            case 13:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Fired);
+                cell.Enemy.TryToAddState(StateOfCharacter.Freezed);
+
+                break;
+
+            case 15:
+
+                if (cell.Enemy.TypeOfEnemy == Specie.Beast) {
+
+                    return 1.4f;
+
+                }
+
+                break;
+
+            case 16:
+
+                return 1.75f;
+
+            case 17:
+
+                return 1.1f;
+
+            case 18:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Bleeding);
+                break;
+
+            case 19:
+
+                //return 1.5f;
+                break;
+
+        }
+
+        return 1f;
+
+    }
+
+    private int DamageForStatus(Cell cell) {
+
+        int acomulatetStateDamage = 0;
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Fired) != 0) {
+
+            acomulatetStateDamage += 2;
+
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Freezed) != 0) {
+
+            acomulatetStateDamage += 1;
+
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Poisoned) != 0) {
+
+            acomulatetStateDamage += 2;
+
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Blessing) != 0) {
+
+            acomulatetStateDamage += 3;
+            
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Cursed) != 0) {
+
+            acomulatetStateDamage += 2;
+
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Bleeding) != 0) {
+
+            acomulatetStateDamage += 2;
+
+        }
+
+        return acomulatetStateDamage;
+
+    }
+
+
+    bool haveArmorShield(Cell cell) {
+
+        if ((cell.Enemy.SpecificEnemy >= 8) && (cell.Enemy.SpecificEnemy <= 10) || cell.Enemy.SpecificEnemy == 30 || cell.Enemy.SpecificEnemy == 32) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
+    
 
 }

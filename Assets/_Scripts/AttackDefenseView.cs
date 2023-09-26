@@ -5,8 +5,8 @@ using UnityEngine;
 public class AttackDefenseView : MonoBehaviour {
     
     //Agarrará las variables de vida y daño y las actualizará en el Gameplay
-    public TMPro.TMP_Text Attack;
-    public TMPro.TMP_Text Health;
+    public int Attack;
+    public int Health;
     public GameObject EnemyPrint;
     public SpriteRenderer Flash;
 
@@ -17,8 +17,8 @@ public class AttackDefenseView : MonoBehaviour {
     public void SetData(int attack, int health, Sprite enemy, bool flash = false) {
 
         StopAllCoroutines();
-        Attack.text = attack.ToString();
-        Health.text = health.ToString();
+        Attack = attack;
+        Health = health;
         EnemyPrint.GetComponent<Image>().sprite = enemy;
         _hideOnDone = health < 1;
         var col = Color.red;

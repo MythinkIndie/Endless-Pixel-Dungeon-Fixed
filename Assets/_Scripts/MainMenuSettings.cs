@@ -47,7 +47,7 @@ public class MainMenuSettings : MonoBehaviour {
                 DatosUser.FbxVolume = fbxSlider.value;
                 break;
             case 3:
-                DatosUser.TextSpeed = textSpeedSlider.value;
+                DatosUser.TextSpeed = (int)Mathf.Round(textSpeedSlider.value);
                 break;
 
         }

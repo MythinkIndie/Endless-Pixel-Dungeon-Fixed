@@ -329,7 +329,7 @@ public class InfoUI : MonoBehaviour {
         foreach(var character in itemLookingAt.description) {
 
             DescripcionObjeto.text += character;
-            yield return new WaitForSeconds(1/DatosPlayer.TextSpeed);
+            yield return new WaitForSeconds(1/(float)DatosPlayer.TextSpeed);
 
         }
 
