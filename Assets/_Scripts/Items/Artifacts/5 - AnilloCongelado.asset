@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 5
   nameObject: Frozen ring
-  description: Every two attacks on the same enemy, the next one will inflict damage
-    to the enemy without him being able to hurt you.
+  description: Freeze state to enemies do more damage
   icon: {fileID: -1708478489, guid: 1856cd235fbd46b4abd63c95915f099f, type: 3}
   isWeapon: 0

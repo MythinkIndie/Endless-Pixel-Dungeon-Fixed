@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 16
   nameObject: Blood lust sword
-  description: Does 150% of the damage, but makes you receive 150% of the damage
+  description: Does 175% of the damage, but makes you receive 150% of the damage
     always. Killing an enemy heals a small part of your health
   icon: {fileID: -240822158, guid: d69578d031f22024480b96d6b0130db3, type: 3}
   isWeapon: 1
