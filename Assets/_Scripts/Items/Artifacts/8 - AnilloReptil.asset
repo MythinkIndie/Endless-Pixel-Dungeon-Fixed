@@ -14,7 +14,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 8
   nameObject: Reptile ring
-  description: You are immune to poison. If you find a reptile, it will have 0 damage
-    and 1 health point, always dropping an object with it.
+  description: This ring inflicts poison in your attacks
   icon: {fileID: -1352532333, guid: 1856cd235fbd46b4abd63c95915f099f, type: 3}
   isWeapon: 0

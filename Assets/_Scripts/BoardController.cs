@@ -227,7 +227,7 @@ public class BoardController : MonoBehaviour {
 
         }
 
-        GenerateRandomEnemies(data, Random.Range(3, 8), 1, 3, 14, 22);
+        GenerateRandomEnemies(data, (_artifactEquiped == 13)?Random.Range(3, 7):Random.Range(4, 8), 1, 3, 14, 22);
         Reload(data);
 
     }
@@ -257,9 +257,9 @@ public class BoardController : MonoBehaviour {
     void GenerateRandomEnemies(List<Cell> data, int amount, int attackMin, int attackMax, int healthMin, int healthMax) {
 
         //Comprobar dificultad
-        attackMin += (int)(_floorsDeep * 1.5);
+        attackMin += (int)(_floorsDeep * 1.2);
         attackMax += (int)(_floorsDeep * 1.5);
-        healthMin += (int)(_floorsDeep * 2.5);
+        healthMin += (int)(_floorsDeep * 2.3);
         healthMax += (int)(_floorsDeep * 3);
 
         for (int i = 0; i < amount; ++i) {
@@ -478,8 +478,12 @@ public class BoardController : MonoBehaviour {
 
             }
 
+<<<<<<< Updated upstream
             _playerHealth = Mathf.Max(0, _playerHealth - cell.Enemy.Attack);
             cell.Enemy.Health = Mathf.Max(0, cell.Enemy.Health + DefenseValue - _playerAttack);
+=======
+            cell.Enemy.Health = Mathf.Max(0, cell.Enemy.Health - DamageForEnemy(cell));
+>>>>>>> Stashed changes
             UpdateUI();
             var ui = GetEnemyUI(x, y);
             ui.SetData(cell.Enemy.Attack, cell.Enemy.Health, cell.Enemy.EnemySprite, true);
@@ -508,7 +512,13 @@ public class BoardController : MonoBehaviour {
 
                 }
 
+<<<<<<< Updated upstream
             } 
+=======
+            }
+
+            ResetBloodScreen();
+>>>>>>> Stashed changes
 
         } else {
 
@@ -599,7 +609,6 @@ public class BoardController : MonoBehaviour {
 
         }
 
-        //Comprobar
         retVal = Instantiate(EnemyUIPrefab, new Vector3(x - 0.1f, y, 0f), Quaternion.identity).GetComponent<AttackDefenseView>();
         retVal.BoardPos = new Vector2Int(x, y);
         _enemyUi.Add(retVal);
@@ -625,19 +634,31 @@ public class BoardController : MonoBehaviour {
                 break;
 
             case ItemType.Exit:
+
                 if (_inventory.Contains(ItemType.Key)) {
 
                     GenerateRandomMap();
 
                 }
+
                 break;
 
             case ItemType.Potion:
-            //Poner limitante
+
                 if (_playerHealth != _maxPlayerHealth) {
                     
                     int cure = 7 + Random.Range(0 + _playerLuck, 5 + (int)(_playerLuck * 1.2));
 
+                    if (_artifactEquiped == 11) {
+
+                        cure = Mathf.FloorToInt(cure / 2f);
+
+                    } else if (_artifactEquiped == 15) {
+
+                        cure += Mathf.FloorToInt(cure / 2f);
+
+                    }
+
                     if (_playerHealth + cure > _maxPlayerHealth) {
 
                         BuffHealth.GetComponent<BuffBenefits>().SetData(_maxPlayerHealth - _playerHealth);
@@ -652,15 +673,27 @@ public class BoardController : MonoBehaviour {
                     UpdateUI();
                     cell.Item = ItemType.None;
                     SetCellView(cell);
+<<<<<<< Updated upstream
+=======
+                    ResetBloodScreen();
+
+>>>>>>> Stashed changes
                 }
+
                 break;
             
             case ItemType.BigPotion:
-            //Poner limitante
+
                 if (_playerHealth != _maxPlayerHealth) {
 
                     int cure = 16 + Mathf.FloorToInt(Random.Range(0 + _playerLuck, 8 + _playerLuck));
 
+                    if (_artifactEquiped == 11) {
+
+                        cure = Mathf.FloorToInt(cure / 2f);
+
+                    }
+
                     if (_playerHealth + cure > _maxPlayerHealth) {
 
                         BuffHealth.GetComponent<BuffBenefits>().SetData(_maxPlayerHealth - _playerHealth);
@@ -676,11 +709,17 @@ public class BoardController : MonoBehaviour {
                     UpdateUI();
                     cell.Item = ItemType.None;
                     SetCellView(cell);
+<<<<<<< Updated upstream
+=======
+                    ResetBloodScreen();
+
+>>>>>>> Stashed changes
                 }
+
                 break;
 
             case ItemType.Sword:
-            //Poner limitante
+
                 int addAtk = Random.Range(0, 80 + _playerLuck)>70?2:1;
                 _playerAttack += addAtk;
                 BuffAtk.GetComponent<BuffBenefits>().SetData(addAtk);
@@ -690,11 +729,12 @@ public class BoardController : MonoBehaviour {
                 break;
 
             case ItemType.Coin:
-            //Poner limitante
-                int gold = Random.Range(1, 3) + _floorsDeep + Random.Range(0, (int)(_playerLuck * 0.2));
+
+                int gold = Random.Range(1, 3) + _floorsDeep + Random.Range(0, Mathf.FloorToInt(_playerLuck * 0.2f));
 
                 if (DatosPlayer.Gold + gold > 9999) {
 
+                    BuffCoins.GetComponent<BuffBenefits>().SetData(9999 - DatosPlayer.Gold);
                     DatosPlayer.Gold = 9999;
 
                 } else {
@@ -720,13 +760,12 @@ public class BoardController : MonoBehaviour {
                     DatosPlayer.Gold += 100;
                     BuffCoins.GetComponent<BuffBenefits>().SetData(100);
 
-
                 } 
+
                 UpdateUI();
                 cell.Item = ItemType.None;
                 SetCellView(cell);
                 break; 
-
 
         }
 
@@ -762,4 +801,380 @@ public class BoardController : MonoBehaviour {
 
     }
 
+<<<<<<< Updated upstream
+=======
+    //Skills Scripting
+
+    private void WeaponSkillsSetUpData() {
+
+        int[] skillsToPrint = new int[2];
+
+        switch(_weaponEquiped) {
+
+            case 5:
+            //Rayo Solar
+                skillsToPrint[0] = 0;
+                skillsToPrint[1] = -1;
+                break;
+            case 9:
+            //3 golpes en cadena night abyss
+                skillsToPrint[0] = 1;
+                skillsToPrint[1] = -1;
+                break;
+            case 10:
+            //Remueve nerfeos
+                skillsToPrint[0] = 2;
+                skillsToPrint[1] = -1;
+                break;
+            case 12:
+            //Golpe más potente, si mata al instante reset
+                skillsToPrint[0] = 3;
+                skillsToPrint[1] = -1;
+                break;
+            case 14:
+            //Quema la habitacion entera
+                skillsToPrint[0] = 4;
+                skillsToPrint[1] = -1;
+                break;
+            case 15:
+            //Rompe el techo y tira piedras
+                skillsToPrint[0] = 5;
+                skillsToPrint[1] = -1;
+                break;
+            case 19:
+            //Super golpe
+                skillsToPrint[0] = 6;
+                skillsToPrint[1] = -1;
+                break;
+            case 17:
+            //Revisar ya que sera el más random y puede dar problemas
+            //Imagenes de ejemplo solo
+                skillsToPrint[0] = 7;
+                skillsToPrint[1] = 8;
+                break;
+            default:
+                skillsToPrint[0] = -1;
+                skillsToPrint[1] = -1;
+                break;
+
+        }
+
+        if (skillsToPrint[0] != -1) {
+
+            var newPrefabSkill = Instantiate(skillPrefab, skillLayer.transform);
+            newPrefabSkill.GetComponent<Skill>().SetSkillData(_weaponEquiped, skillsToPrint[0], 4);
+
+        }
+
+        if (skillsToPrint[1] != -1) {
+
+            var newPrefabSkill = Instantiate(skillPrefab, skillLayer.transform);
+            newPrefabSkill.GetComponent<Skill>().SetSkillData(_weaponEquiped, skillsToPrint[1], 4);
+
+        }
+
+    }
+
+    int breakArmor = 0;
+    bool lastHitKillDemon = false;
+
+    private int DamageForEnemy(Cell cell) {
+
+        //Debug.Log(DamageWithWeapon(cell));
+        //Debug.Log(DamageForStatus(cell));
+        //Debug.Log(cell.Enemy.TypeOfEnemy);
+        //Debug.Log(breakArmor);
+
+        int DamageValue = Mathf.FloorToInt(Mathf.FloorToInt(_playerAttack * DamageWithWeapon(cell) * DamageWithArtifact(cell)) + DamageForStatus(cell)) - (haveArmorShield(cell)?Mathf.Clamp(Mathf.FloorToInt(cell.Enemy.Health * 0.1f) - breakArmor, 0, 9999):0);
+
+        //Curses Bane pasive
+        if (DamageValue >= cell.Enemy.Health && cell.Enemy.TypeOfEnemy == Specie.Undead && _weaponEquiped == 6) {
+
+            int cure = Mathf.FloorToInt(_maxPlayerHealth * 0.1f);
+
+            if (_playerHealth + cure > _maxPlayerHealth) {
+
+                BuffHealth.GetComponent<BuffBenefits>().SetData(_maxPlayerHealth - _playerHealth);
+                _playerHealth = _maxPlayerHealth;
+
+            } else {
+
+                _playerHealth += cure;
+                BuffHealth.GetComponent<BuffBenefits>().SetData(cure);
+
+            }
+
+        }
+
+        if (DamageValue >= cell.Enemy.Health && cell.Enemy.TypeOfEnemy == Specie.Demon && _weaponEquiped == 11) {
+
+            lastHitKillDemon = true;
+
+        }
+
+        return DamageValue;
+
+    }
+
+    private int DamageForPlayer(Cell cell) {
+
+        int cure = 0;
+
+        if (0 >= cell.Enemy.Health && cell.Enemy.TypeOfEnemy == Specie.Undead && _weaponEquiped == 6) {
+
+            cure = Mathf.FloorToInt(_maxPlayerHealth * 0.1f);
+
+        }
+
+        if (_artifactEquiped == 11) {
+
+            if (Random.Range(0, 100)<25) {
+
+                _playerAttack += 1;
+                BuffAtk.GetComponent<BuffBenefits>().SetData(1);
+                UpdateUI();
+
+            }
+
+        }
+
+        //Acabar de hacer
+        if (_weaponEquiped == 16) {
+
+            return Mathf.FloorToInt(cell.Enemy.Attack * 1.5f) - cure;
+
+        } else if (_weaponEquiped == 19) {
+
+            return Mathf.Clamp(cell.Enemy.Attack - 2, 1, 9999) - cure;
+
+        } else {
+
+            return cell.Enemy.Attack - cure;
+
+        }
+
+    }
+
+    private float DamageWithWeapon(Cell cell) {
+
+        //TODO
+        // Duelista
+        // Rose Katana
+        // Creator Sword
+        // Pochita
+        // Royal Edge
+
+        switch (_weaponEquiped) {
+
+            case 1:
+                
+                cell.Enemy.TryToAddState(StateOfCharacter.Fired);
+                break;
+            
+            case 2:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Freezed);
+                break;
+
+            case 3:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Poisoned);
+                break;
+
+            case 6:
+
+                if (cell.Enemy.TypeOfEnemy == Specie.Undead) {
+
+                    return 1.5f;
+
+                }
+
+                break;
+            
+            case 7:
+
+                if (cell.Enemy.States.Count == 0) {
+
+                    cell.Enemy.TryToAddState((StateOfCharacter)Random.Range(0, 5));
+
+                }                
+
+                break;
+
+            case 8:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Blessing);
+
+                if (cell.Enemy.TypeOfEnemy == Specie.Demon) {
+
+                    return 1.4f;
+
+                }
+
+                break;
+
+            case 10:
+
+                return 1.25f;
+
+            case 11:
+
+                breakArmor = Random.Range(0, 3);
+
+                if (lastHitKillDemon) {
+
+                    lastHitKillDemon = false;
+                    return 2f;
+
+                }
+                
+                break;
+
+            case 12:
+
+                // Si tiene la habilidad activada, el golpe hace el 1.2f
+                // Si no mata el enemigo con la habilidad activa, hay que ponerlo en cooldown
+                //return 1.2f;
+                break;
+
+            case 13:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Fired);
+                cell.Enemy.TryToAddState(StateOfCharacter.Freezed);
+
+                break;
+
+            case 15:
+
+                if (cell.Enemy.TypeOfEnemy == Specie.Beast) {
+
+                    return 1.4f;
+
+                }
+
+                break;
+
+            case 16:
+
+                return 1.75f;
+
+            case 17:
+
+                return 1.1f;
+
+            case 18:
+
+                cell.Enemy.TryToAddState(StateOfCharacter.Bleeding);
+                break;
+
+            case 19:
+
+                //return 1.5f;
+                break;
+
+        }
+
+        if (_artifactEquiped == 8) {
+
+            cell.Enemy.TryToAddState(StateOfCharacter.Poisoned);
+
+        } 
+
+        return 1f;
+
+    }
+
+    private int DamageForStatus(Cell cell) {
+
+        int acomulatetStateDamage = 0;
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Fired) != 0) {
+
+            acomulatetStateDamage += 2;
+
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Freezed) != 0) {
+
+            acomulatetStateDamage += (_artifactEquiped == 5)?3:1;
+
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Poisoned) != 0) {
+
+            acomulatetStateDamage += 2;
+
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Blessing) != 0) {
+
+            acomulatetStateDamage += 3;
+            
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Cursed) != 0) {
+
+            acomulatetStateDamage += 2;
+
+        }
+
+        if (cell.Enemy.States.Count(state => state == StateOfCharacter.Bleeding) != 0) {
+
+            acomulatetStateDamage += 2;
+
+        }
+
+        return acomulatetStateDamage;
+
+    }
+
+
+    bool haveArmorShield(Cell cell) {
+
+        if ((cell.Enemy.SpecificEnemy >= 8) && (cell.Enemy.SpecificEnemy <= 10) || cell.Enemy.SpecificEnemy == 30 || cell.Enemy.SpecificEnemy == 32) {
+
+            return true;
+
+        } else {
+
+            return false;
+
+        }
+
+    }
+
+    int DamageWithArtifact(Cell cell) {
+
+        if (_artifactEquiped == 2) {
+
+            if (Random.Range(0, 100) < 20) {
+
+                return 2;
+
+            }
+
+        } else if (_artifactEquiped == 17 && cell.Enemy.TypeOfEnemy == Specie.Undead) {
+
+            return 3;
+
+        }
+
+        return 1;
+
+    }
+
+    void ResetBloodScreen() {
+
+        StopAllCoroutines();
+        _maxBloodScreen = Mathf.Abs(((float)_playerHealth / (float)_maxPlayerHealth) - 1f)/20;
+        Color color = bloodScreen.color;
+        color.a = _maxBloodScreen;
+        bloodScreen.color = color;
+        color.a = _maxBloodScreen * 1.8f;
+        bloodScreenBounds.color = color;
+        isDoingCoroutine = false;
+
+    }
+
+>>>>>>> Stashed changes
 }
