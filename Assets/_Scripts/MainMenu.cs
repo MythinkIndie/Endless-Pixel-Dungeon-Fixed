@@ -7,14 +7,13 @@ using DG.Tweening;
 
 public class MainMenu : MonoBehaviour {
 
-    [SerializeField] private UserData DatosPlayer;
     int _weaponEquiped;
     int _artifactEquiped;
 
     void Start() {
 
-        _weaponEquiped = DatosPlayer.TakeWeaponEquiped().id;
-        _artifactEquiped = DatosPlayer.TakeArtifactEquiped().id;
+        _weaponEquiped = UserData.SharedInstance.TakeWeaponEquiped().id;
+        _artifactEquiped = UserData.SharedInstance.TakeArtifactEquiped().id;
 
     }
 

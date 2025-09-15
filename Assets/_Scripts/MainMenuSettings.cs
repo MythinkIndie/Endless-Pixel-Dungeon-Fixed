@@ -6,10 +6,17 @@ using DG.Tweening;
 
 public class MainMenuSettings : MonoBehaviour {
 
-    [SerializeField] private Slider volumeSlider;
+    [SerializeField] private Slider MusicSlider;
     [SerializeField] private Slider fbxSlider;
     [SerializeField] private Slider textSpeedSlider;
     [SerializeField] private UserData DatosUser;
+
+    [SerializeField] private Image MusicImage;
+    [SerializeField] private GameObject MusicSlashImage;
+    [SerializeField] private Image SFXImage;
+
+    [SerializeField] private List<Sprite> MusicSpritesList;
+    [SerializeField] private List<Sprite> SFXSpritesList;
 
     [SerializeField] private Button ExitSettings;
     [SerializeField] private Button PutSettings;
@@ -23,11 +30,14 @@ public class MainMenuSettings : MonoBehaviour {
         BackgroundSettings.transform.localPosition = new Vector3(0, -2000, 0);
         AllSettingOptions.transform.localPosition = new Vector3(0, -2000, 0);
 
-        volumeSlider.value = DatosUser.MusicVolume;
+        MusicSlider.value = DatosUser.MusicVolume;
         fbxSlider.value = DatosUser.FbxVolume;
         textSpeedSlider.value = DatosUser.TextSpeed;
+        
+        ChangeUserData(1);
+        ChangeUserData(2);
 
-        volumeSlider.onValueChanged.AddListener((v) => ChangeUserData(1));
+        MusicSlider.onValueChanged.AddListener((v) => ChangeUserData(1));
         fbxSlider.onValueChanged.AddListener((v) => ChangeUserData(2));
         textSpeedSlider.onValueChanged.AddListener((v) => ChangeUserData(3));
 
@@ -41,12 +51,38 @@ public class MainMenuSettings : MonoBehaviour {
         switch (sliderNum) {
 
             case 1:
-                DatosUser.MusicVolume = volumeSlider.value;
+
+                DatosUser.MusicVolume = MusicSlider.value;
+
+                if (DatosUser.MusicVolume > 50) {
+                    MusicImage.sprite = MusicSpritesList[0];
+                    MusicSlashImage.SetActive(false);
+                } else if (DatosUser.MusicVolume > 0) {
+                    MusicImage.sprite = MusicSpritesList[1];
+                    MusicSlashImage.SetActive(false);
+                } else {
+                    MusicImage.sprite = MusicSpritesList[1];
+                    MusicSlashImage.SetActive(true);
+                }
+
                 break;
+
             case 2:
+
                 DatosUser.FbxVolume = fbxSlider.value;
+
+                if (DatosUser.FbxVolume > 50) {
+                    SFXImage.sprite = SFXSpritesList[0];
+                } else if (DatosUser.FbxVolume > 0) {
+                    SFXImage.sprite = SFXSpritesList[1];
+                } else {
+                    SFXImage.sprite = SFXSpritesList[2];
+                }
+
                 break;
+
             case 3:
+
                 DatosUser.TextSpeed = (int)Mathf.Round(textSpeedSlider.value);
                 break;
 

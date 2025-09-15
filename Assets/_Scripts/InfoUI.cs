@@ -6,10 +6,10 @@ using UnityEngine.Events;
 
 public class InfoUI : MonoBehaviour {
 
-    [Header("Datos")]
-    [SerializeField] private UserData DatosPlayer;
-
     [Header("Texto para los datos")]
+    [SerializeField] private Image PlayerSprite;
+    [SerializeField] private List<Sprite> CharacterSpriteList;
+    [SerializeField] private TMPro.TMP_Text username;
     [SerializeField] private TMPro.TMP_Text level;
     [SerializeField] private TMPro.TMP_Text hp;
     [SerializeField] private TMPro.TMP_Text attack;
@@ -17,10 +17,12 @@ public class InfoUI : MonoBehaviour {
     [SerializeField] private TMPro.TMP_Text deepest;
 
     [Header("Level Up Pop Up")]
+    [SerializeField] private GameObject MaxLevelReached;
     [SerializeField] private GameObject PopupNoLevelUp;
     [SerializeField] private GameObject PopupLevelUp;
     [SerializeField] private Button LevelUpButton;
     [SerializeField] private Button AcceptConfirm;
+    [SerializeField] private Button AcceptConfirm2;
     [SerializeField] private Button CancelLvlUpButton;
     [SerializeField] private Button AcceptLvlUpButton;
     [SerializeField] private TMPro.TMP_Text levelUpText;
@@ -70,6 +72,7 @@ public class InfoUI : MonoBehaviour {
 
         LevelUpButton.onClick.AddListener(LevelUp);
         AcceptConfirm.onClick.AddListener(ClosePopUp);
+        AcceptConfirm2.onClick.AddListener(ClosePopUp);
         CancelLvlUpButton.onClick.AddListener(ClosePopUp);
         AcceptLvlUpButton.onClick.AddListener(TrueLevelUp);
 
@@ -82,25 +85,29 @@ public class InfoUI : MonoBehaviour {
 
         EquipButton.GetComponent<Button>().onClick.AddListener(() => EquipItem());
 
-        WeaponEquipedInMemory = DatosPlayer.TakeWeaponEquiped();
+        WeaponEquipedInMemory = UserData.SharedInstance.TakeWeaponEquiped();
         EquipedWeaponIcon.GetComponent<Image>().sprite = WeaponEquipedInMemory.icon;
 
-        ArtifactEquipedInMemory = DatosPlayer.TakeArtifactEquiped();
+        ArtifactEquipedInMemory = UserData.SharedInstance.TakeArtifactEquiped();
         EquipedArtifactIcon.GetComponent<Image>().sprite = ArtifactEquipedInMemory.icon;
 
-        GetSelectedBuild(DatosPlayer.Build);
+        GetSelectedBuild(UserData.SharedInstance.Build);
+
+        InventoryPrinter.GetComponent<RectTransform>().anchoredPosition = new Vector2(InventoryPrinter.GetComponent<RectTransform>().anchoredPosition.x, -150f);
 
     }
 
     void UpdateUI() {
 
-        hp.text = DatosPlayer.HP.ToString();
-        level.text = DatosPlayer.Level.ToString();
-        attack.text = DatosPlayer.Attack.ToString();
-        gold.text = DatosPlayer.Gold.ToString();
-        deepest.text = DatosPlayer.Deepest.ToString();
+        PlayerSprite.sprite = CharacterSpriteList[UserData.SharedInstance.CharSprite];
+        hp.text = UserData.SharedInstance.HP.ToString();
+        username.text = UserData.SharedInstance.Username;
+        level.text = UserData.SharedInstance.Level.ToString();
+        attack.text = UserData.SharedInstance.Attack.ToString();
+        gold.text = UserData.SharedInstance.Gold.ToString();
+        deepest.text = UserData.SharedInstance.Deepest.ToString();
 
-        nextLvlRequirements = (DatosPlayer.Level * 20) + (DatosPlayer.HP / 2);
+        nextLvlRequirements = (UserData.SharedInstance.Level * 20) + (UserData.SharedInstance.HP / 2);
         haveNextLvlRequirements = TextLevelUp();
 
         goldred.text = gold.text;
@@ -108,6 +115,12 @@ public class InfoUI : MonoBehaviour {
 
         requieredgold1.text = nextLvlRequirements.ToString();
         requieredgold2.text = nextLvlRequirements.ToString();
+
+        if (UserData.SharedInstance.Level >= 20) {
+
+            LevelUpButton.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().text = "Max Lvl";
+
+        }
 
         ClearInventoryItems();
         PrintMythicObjects();
@@ -124,7 +137,7 @@ public class InfoUI : MonoBehaviour {
 
     public bool TextLevelUp() {
 
-        if (DatosPlayer.Gold >= nextLvlRequirements) {
+        if (UserData.SharedInstance.Gold >= nextLvlRequirements && UserData.SharedInstance.Level < 20) {
 
             levelUpText.color = Color.green; 
             return true;
@@ -146,7 +159,15 @@ public class InfoUI : MonoBehaviour {
 
         } else {
 
-            PopupNoLevelUp.SetActive(true);
+            if (UserData.SharedInstance.Level >= 20) {
+
+                MaxLevelReached.SetActive(true);
+
+            } else {
+
+                PopupNoLevelUp.SetActive(true);
+
+            }
 
         }
 
@@ -154,20 +175,20 @@ public class InfoUI : MonoBehaviour {
 
     private void TrueLevelUp() {
 
-        ++DatosPlayer.Level;
-        DatosPlayer.HP += (DatosPlayer.HP / 10);
+        ++UserData.SharedInstance.Level;
+        UserData.SharedInstance.HP += (UserData.SharedInstance.HP / 10);
         
-        if (DatosPlayer.Level < 10) {
+        if (UserData.SharedInstance.Level < 10) {
 
-            ++DatosPlayer.Attack;
+            ++UserData.SharedInstance.Attack;
 
         } else {
 
-            DatosPlayer.Attack += (DatosPlayer.Level/5);
+            UserData.SharedInstance.Attack += (UserData.SharedInstance.Level/5);
 
         }
 
-        DatosPlayer.Gold -= nextLvlRequirements;
+        UserData.SharedInstance.Gold -= nextLvlRequirements;
         
         UpdateUI();
         ClosePopUp();
@@ -178,6 +199,7 @@ public class InfoUI : MonoBehaviour {
 
         PopupLevelUp.SetActive(false);
         PopupNoLevelUp.SetActive(false);
+        MaxLevelReached.SetActive(false);
 
     }
 
@@ -195,19 +217,19 @@ public class InfoUI : MonoBehaviour {
 
             Ranura1.GetComponent<Image>().sprite = SpriteSelected;
             Ranura1.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().color = Color.green;
-            DatosPlayer.Build = 1;
+            UserData.SharedInstance.Build = 1;
 
         } else if (selected == 2) {
 
             Ranura2.GetComponent<Image>().sprite = SpriteSelected;
             Ranura2.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().color = Color.green;
-            DatosPlayer.Build = 2;
+            UserData.SharedInstance.Build = 2;
 
         } else {
 
             Ranura3.GetComponent<Image>().sprite = SpriteSelected;
             Ranura3.transform.GetChild(0).GetComponent<TMPro.TMP_Text>().color = Color.green;
-            DatosPlayer.Build = 3;
+            UserData.SharedInstance.Build = 3;
 
         }
 
@@ -251,7 +273,7 @@ public class InfoUI : MonoBehaviour {
 
         if (WeaponInventoryButton.GetComponent<Image>().sprite == InventorySelected) {
 
-            foreach (MythicObject item in DatosPlayer.Inventory) {
+            foreach (MythicObject item in UserData.SharedInstance.Inventory) {
 
                 if (item.isWeapon) {
 
@@ -263,7 +285,7 @@ public class InfoUI : MonoBehaviour {
 
         } else {
 
-            foreach (MythicObject item in DatosPlayer.Inventory) {
+            foreach (MythicObject item in UserData.SharedInstance.Inventory) {
 
                 if (!item.isWeapon) {
 
@@ -295,7 +317,7 @@ public class InfoUI : MonoBehaviour {
         
         if (itemLookingAt.isWeapon) {
 
-            if (DatosPlayer.WeaponEquiped == itemLookingAt.id) {
+            if (UserData.SharedInstance.WeaponEquiped == itemLookingAt.id) {
 
                 Equip.SetActive(false);
 
@@ -307,7 +329,7 @@ public class InfoUI : MonoBehaviour {
 
         } else {
 
-            if (DatosPlayer.ArtifactEquiped == itemLookingAt.id) {
+            if (UserData.SharedInstance.ArtifactEquiped == itemLookingAt.id) {
 
                 Equip.SetActive(false);
 
@@ -329,12 +351,12 @@ public class InfoUI : MonoBehaviour {
         foreach(var character in itemLookingAt.description) {
 
             DescripcionObjeto.text += character;
-            float timeToWait = 1/(float)DatosPlayer.TextSpeed;
-            yield return new WaitForSecondsRealtime(timeToWait);
+            float timeToWait = 1f/(float)UserData.SharedInstance.TextSpeed;
+            yield return new WaitForSeconds(timeToWait);
 
         }
 
-        yield return new WaitForSeconds(0.1f);
+        yield return null;
 
     }
 
@@ -344,14 +366,14 @@ public class InfoUI : MonoBehaviour {
 
         if (itemLookingAt.isWeapon) {
 
-            DatosPlayer.WeaponEquiped = itemLookingAt.id;
-            WeaponEquipedInMemory = DatosPlayer.TakeWeaponEquiped();
+            UserData.SharedInstance.WeaponEquiped = itemLookingAt.id;
+            WeaponEquipedInMemory = UserData.SharedInstance.TakeWeaponEquiped();
             EquipedWeaponIcon.GetComponent<Image>().sprite = WeaponEquipedInMemory.icon;
 
         } else {
 
-            DatosPlayer.ArtifactEquiped = itemLookingAt.id;
-            ArtifactEquipedInMemory = DatosPlayer.TakeArtifactEquiped();
+            UserData.SharedInstance.ArtifactEquiped = itemLookingAt.id;
+            ArtifactEquipedInMemory = UserData.SharedInstance.TakeArtifactEquiped();
             EquipedArtifactIcon.GetComponent<Image>().sprite = ArtifactEquipedInMemory.icon;
 
         }
@@ -360,10 +382,10 @@ public class InfoUI : MonoBehaviour {
 
     public void ForcedEquipItem() {
 
-        WeaponEquipedInMemory = DatosPlayer.TakeWeaponEquiped();
+        WeaponEquipedInMemory = UserData.SharedInstance.TakeWeaponEquiped();
         EquipedWeaponIcon.GetComponent<Image>().sprite = WeaponEquipedInMemory.icon;
 
-        ArtifactEquipedInMemory = DatosPlayer.TakeArtifactEquiped();
+        ArtifactEquipedInMemory = UserData.SharedInstance.TakeArtifactEquiped();
         EquipedArtifactIcon.GetComponent<Image>().sprite = ArtifactEquipedInMemory.icon;
 
         if (WeaponEquipedInMemory.id == 0) {

@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/MythicPresentation.unity
+    guid: 5ababd6293fa97e4f8126dc5ae7585a3
+  - enabled: 1
+    path: Assets/Scenes/LoadingScreen.unity
+    guid: 75a056cc0be9c6340a2f56561a06a119
+  - enabled: 1
     path: Assets/Scenes/Menu.unity
     guid: 4040abfeb4d7c8e4c82554714c8a4265
   - enabled: 1
