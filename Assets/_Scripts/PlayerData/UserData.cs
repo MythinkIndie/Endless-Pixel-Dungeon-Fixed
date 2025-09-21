@@ -22,7 +22,6 @@ public class UserData : MonoBehaviour {
     int _weaponEquiped = 0;
     int _artifactEquiped = 0;
 
-    string _id = "";
     string _username = "";
     int _sceneToGo = -1;
 
@@ -53,33 +52,6 @@ public class UserData : MonoBehaviour {
 
             _newGame = 1;
             PlayerPrefs.SetInt("USER_NEWGAME", _newGame);
-
-        }
-
-    }
-
-    public string ID {
-
-        get {
-
-            if (_id == "") {
-
-                if (!PlayerPrefs.HasKey("USER_IDENTIFIER")) {
-
-                    ID = PlayFabController.PFC.ReturnMobileId();
-
-                }
-
-                _id = PlayerPrefs.GetString("USER_IDENTIFIER");
-
-            }
-
-            return _id;
-
-        } set {
-
-            _id = value;
-            PlayerPrefs.SetString("USER_IDENTIFIER", _id);
 
         }
 
@@ -561,7 +533,6 @@ public class UserData : MonoBehaviour {
         _artifactEquiped = -1;
         _buildSelected = -1;
         _level = -1;
-        _id = "";
         _username = "";
         _charSprite = -1;
         _attack = -1;
@@ -582,7 +553,6 @@ public class UserData : MonoBehaviour {
         _artifactEquiped = ArtifactEquiped;
         _buildSelected = Build;
         _level = Level;
-        _id = ID;
         _username = Username;
         _charSprite = CharSprite;
         _attack = Attack;

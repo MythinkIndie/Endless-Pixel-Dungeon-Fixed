@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: 6
   nameObject: Bane of curses
-  description: Does more damage against the undead and when killing them recovers
+  description: Does more damage against the undead and, when killing them, recovers
     life.
   icon: {fileID: -1789478933, guid: a7191384690a85e4b90674bf61e12261, type: 3}
   isWeapon: 1

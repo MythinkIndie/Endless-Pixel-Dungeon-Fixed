@@ -10,7 +10,8 @@ public class MainMenu : MonoBehaviour {
     int _weaponEquiped;
     int _artifactEquiped;
 
-    void Start() {
+    void Start()
+    {
 
         _weaponEquiped = UserData.SharedInstance.TakeWeaponEquiped().id;
         _artifactEquiped = UserData.SharedInstance.TakeArtifactEquiped().id;

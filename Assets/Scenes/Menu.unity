@@ -342,7 +342,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 144305837}
+      - m_Target: {fileID: 266655183}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: HelpScreen
         m_Mode: 1
@@ -481,7 +481,6 @@ GameObject:
   - component: {fileID: 144305835}
   - component: {fileID: 144305834}
   - component: {fileID: 144305833}
-  - component: {fileID: 144305837}
   - component: {fileID: 144305838}
   m_Layer: 5
   m_Name: Canvas
@@ -575,19 +574,6 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
---- !u!114 &144305837
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 144305832}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8c61e176b147d144383c959385119e95, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  DatosPlayer: {fileID: 11400000, guid: 1773b556285ec36498eb5e97eb7cece1, type: 2}
 --- !u!114 &144305838
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -860,6 +846,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 221488840}
   m_CullTransparentMesh: 1
+--- !u!1 &266655182
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 266655184}
+  - component: {fileID: 266655183}
+  m_Layer: 0
+  m_Name: MenuUiManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &266655183
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266655182}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8c61e176b147d144383c959385119e95, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &266655184
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 266655182}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 5
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &280373400
 GameObject:
   m_ObjectHideFlags: 0
@@ -2029,7 +2059,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 958166110}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 773.9378, y: 1513.061, z: 1.4897467}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2864,7 +2894,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 144305837}
+      - m_Target: {fileID: 266655183}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: PlayGame
         m_Mode: 1
@@ -3006,7 +3036,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1533051681
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3824,7 +3854,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 144305837}
+      - m_Target: {fileID: 266655183}
         m_TargetAssemblyTypeName: MainMenu, Assembly-CSharp
         m_MethodName: SeeEquipment
         m_Mode: 1
