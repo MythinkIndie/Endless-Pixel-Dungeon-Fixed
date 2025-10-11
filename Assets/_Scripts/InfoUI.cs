@@ -66,8 +66,11 @@ public class InfoUI : MonoBehaviour {
     [SerializeField] private Sprite InventoryNotSelected;
     [SerializeField] private Sprite InventorySelected;
 
-    void Start() {
-        
+    [SerializeField] private AudioClip InventoryMusic;
+
+    void Start()
+    {
+
         UpdateUI();
 
         LevelUpButton.onClick.AddListener(LevelUp);
@@ -94,6 +97,8 @@ public class InfoUI : MonoBehaviour {
         GetSelectedBuild(UserData.SharedInstance.Build);
 
         InventoryPrinter.GetComponent<RectTransform>().anchoredPosition = new Vector2(InventoryPrinter.GetComponent<RectTransform>().anchoredPosition.x, -150f);
+        
+        AudioManager.SharedInstance.PlayMusic(InventoryMusic, true);
 
     }
 
@@ -153,21 +158,29 @@ public class InfoUI : MonoBehaviour {
 
     private void LevelUp() {
 
-        if (haveNextLvlRequirements) {
+        if (haveNextLvlRequirements)
+        {
 
             PopupLevelUp.SetActive(true);
+            AudioManager.SharedInstance.SoundSelect();
 
-        } else {
+        }
+        else
+        {
 
-            if (UserData.SharedInstance.Level >= 20) {
+            if (UserData.SharedInstance.Level >= 20)
+            {
 
                 MaxLevelReached.SetActive(true);
 
-            } else {
+            }
+            else
+            {
 
                 PopupNoLevelUp.SetActive(true);
 
             }
+            AudioManager.SharedInstance.SoundError();
 
         }
 
@@ -189,21 +202,26 @@ public class InfoUI : MonoBehaviour {
         }
 
         UserData.SharedInstance.Gold -= nextLvlRequirements;
+        AudioManager.SharedInstance.SoundConfirm();
         
         UpdateUI();
         ClosePopUp();
 
     }
 
-    private void ClosePopUp() {
+    private void ClosePopUp()
+    {
 
         PopupLevelUp.SetActive(false);
         PopupNoLevelUp.SetActive(false);
         MaxLevelReached.SetActive(false);
+        AudioManager.SharedInstance.SoundCancel();
 
     }
 
     private void GetSelectedBuild(int selected) {
+
+        AudioManager.SharedInstance.SoundSelect();
 
         Ranura1.GetComponent<Image>().sprite = SpriteNoSelected;
         Ranura2.GetComponent<Image>().sprite = SpriteNoSelected;
@@ -243,6 +261,7 @@ public class InfoUI : MonoBehaviour {
         
         if (selected == 1 && WeaponInventoryButton.GetComponent<Image>().sprite != InventorySelected) {
 
+            AudioManager.SharedInstance.SoundSelect();
             WeaponInventoryButton.GetComponent<Image>().sprite = InventorySelected;
             ArtifactsInventoryButton.GetComponent<Image>().sprite = InventoryNotSelected;
             ClearInventoryItems();
@@ -251,6 +270,7 @@ public class InfoUI : MonoBehaviour {
 
         } else if (selected == 2 && ArtifactsInventoryButton.GetComponent<Image>().sprite != InventorySelected) {
 
+            AudioManager.SharedInstance.SoundSelect();
             ArtifactsInventoryButton.GetComponent<Image>().sprite = InventorySelected;
             WeaponInventoryButton.GetComponent<Image>().sprite = InventoryNotSelected;
             ClearInventoryItems();

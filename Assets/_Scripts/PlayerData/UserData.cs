@@ -279,7 +279,7 @@ public class UserData : MonoBehaviour {
 
             if (_sceneToGo <= -1) {
 
-                SceneToGo = 1;
+                SceneToGo = 2;
 
             }
 
@@ -546,7 +546,8 @@ public class UserData : MonoBehaviour {
 
     }
 
-    void Start() {
+    void Start()
+    {
 
         _inventory = Inventory;
         _weaponEquiped = WeaponEquiped;
@@ -563,6 +564,11 @@ public class UserData : MonoBehaviour {
         _textSpeed = TextSpeed;
         _musicVolume = MusicVolume;
         _fbxVolume = FbxVolume;
+
+        if (_username == "")
+        {
+            SceneManager.LoadScene(1);
+        }
 
     }
 

@@ -11,6 +11,7 @@ public class PlayerManager : MonoBehaviour
     public System.Action<int> OnAttackChanged;
     public System.Action<ItemType, bool> OnPickupKeyChest;
     public System.Action OnPlayerDeath;
+    public bool AttackBoost = false;
 
     public void Initialize(UserData userData)
     {

@@ -10,21 +10,22 @@ public class UIManager : MonoBehaviour
     public TMPro.TMP_Text playerMaxHealthText;
     public TMPro.TMP_Text playerGoldText;
     public TMPro.TMP_Text playerDepthText;
-    
+
     [Header("Popups")]
     public GameObject gameOverPopup;
     public GameObject personalRecordPopup;
     public GameObject chestFoundPopup;
-    
+    public GameObject exitPopup;
+
     [Header("Inventory")]
     public GameObject inventoryBox;
-    
+
     [Header("Effects")]
     public UnityEngine.UI.Image bloodScreen;
     public UnityEngine.UI.Image bloodScreenBounds;
-    
+
     private bool isBloodAnimating = false;
-    
+
     public void Initialize()
     {
         // Subscribe to player events
@@ -32,17 +33,17 @@ public class UIManager : MonoBehaviour
         playerManager.OnHealthChanged += UpdateHealthUI;
         playerManager.OnAttackChanged += UpdateAttackUI;
         playerManager.OnPickupKeyChest += UpdateInventoryUI;
-        
+
         DungeonGameManager.Instance.OnFloorChanged += UpdateDepthUI;
         DungeonGameManager.Instance.OnGameOver += ShowGameOver;
-        
+
         UpdateUI();
+        InitializeUpdateUI();
     }
 
     public void UpdateUI()
     {
         var playerManager = DungeonGameManager.Instance.playerManager;
-        var playerData = DungeonGameManager.Instance.playerData;
 
         if (playerManager != null)
         {
@@ -52,38 +53,42 @@ public class UIManager : MonoBehaviour
             playerMaxHealthText.text = "/ " + player.MaxHealth.ToString();
         }
 
-        if (playerData != null)
+        if (UserData.SharedInstance != null)
         {
-            playerGoldText.text = playerData.Gold.ToString();
+            playerGoldText.text = UserData.SharedInstance.Gold.ToString();
         }
 
         playerDepthText.text = DungeonGameManager.Instance.currentFloor.ToString();
 
+    }
+
+    private void InitializeUpdateUI()
+    {
         UpdateInventoryUI(ItemType.Key, false);
         UpdateInventoryUI(ItemType.Chest, false);
     }
-    
+
     private void UpdateHealthUI(int newHealth)
     {
         playerHealthText.text = newHealth.ToString();
         UpdateBloodEffect();
     }
-    
+
     private void UpdateAttackUI(int newAttack)
     {
         playerAttackText.text = newAttack.ToString();
     }
-    
+
     private void UpdateDepthUI(int newDepth)
     {
         playerDepthText.text = newDepth.ToString();
     }
-    
+
     public void UpdateGoldUI(int newGold)
     {
         playerGoldText.text = newGold.ToString();
     }
-    
+
     private void UpdateBloodEffect()
     {
         if (!isBloodAnimating)
@@ -95,14 +100,14 @@ public class UIManager : MonoBehaviour
             StartCoroutine(BloodEffectCoroutine(bloodIntensity));
         }
     }
-    
+
     private System.Collections.IEnumerator BloodEffectCoroutine(float intensity)
     {
         isBloodAnimating = true;
-        
+
         Color bloodColor = bloodScreen.color;
         Color boundsColor = bloodScreenBounds.color;
-        
+
         // Breathing effect
         while (true)
         {
@@ -111,24 +116,38 @@ public class UIManager : MonoBehaviour
             boundsColor.a = intensity * 1.8f;
             bloodScreen.color = bloodColor;
             bloodScreenBounds.color = boundsColor;
-            
+
             yield return new WaitForSeconds(0.8f);
-            
+
             // Fade out
             bloodColor.a = intensity - 0.01f;
             boundsColor.a = (intensity - 0.01f) * 1.8f;
             bloodScreen.color = bloodColor;
             bloodScreenBounds.color = boundsColor;
-            
+
             yield return new WaitForSeconds(0.8f);
         }
     }
-    
+
     public void ShowGameOver()
     {
         gameOverPopup.SetActive(true);
     }
-    
+
+    public void RetryGameButton()
+    {
+
+    }
+
+    public void OpenExitMenuButton()
+    {
+        exitPopup.SetActive(true);
+    }
+    public void CloseExitMenuButton()
+    {
+        exitPopup.SetActive(false);
+    }
+
     public void UpdateInventoryUI(ItemType item, bool hasItem)
     {
         if (item == ItemType.Key)
@@ -141,5 +160,10 @@ public class UIManager : MonoBehaviour
             var chestImage = inventoryBox.transform.GetChild(1).GetComponent<UnityEngine.UI.Image>();
             chestImage.color = hasItem ? Color.white : new Color(0.5f, 0.5f, 0.5f, 0.3f);
         }
+    }
+
+    public void ShowEnemyInterface(Enemy enemy)
+    { 
+        
     }
 }

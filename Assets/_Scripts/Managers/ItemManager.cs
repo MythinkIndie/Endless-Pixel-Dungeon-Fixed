@@ -15,6 +15,13 @@ public class ItemManager : MonoBehaviour
     public Action<ItemType, Vector2Int> OnItemCollected;
     public Action<ItemType, bool> OnPickupKeyChest;
 
+    [SerializeField] private AudioClip KeySFX;
+    [SerializeField] private AudioClip PickChestSFX;
+    [SerializeField] private AudioClip DrinkPotionSFX;
+    [SerializeField] private AudioClip CantPickPotionSFX;
+    [SerializeField] private List<AudioClip> CoinPickSFX;
+    [SerializeField] private List<AudioClip> SwordPickSFX;
+
     public void Initialize()
     {
 
@@ -37,18 +44,20 @@ public class ItemManager : MonoBehaviour
             case ItemType.Key:
                 player.AddItem(ItemType.Key);
                 OnPickupKeyChest?.Invoke(ItemType.Key, true);
-                //ShowBuffEffect(buffAttackPrefab, "Key collected!");
+                AudioManager.SharedInstance.PlaySound(KeySFX);
                 break;
 
             case ItemType.Potion:
                 if (player.GetPlayer().CurrentHealth < player.GetPlayer().MaxHealth)
                 {
+                    AudioManager.SharedInstance.PlaySound(DrinkPotionSFX);
                     int healAmount = CalculateHealAmount(7, 5);
+                    ShowBuffEffect(buffHealthPrefab, player.GetPlayer().RealHeal(healAmount));
                     player.Heal(healAmount);
-                    ShowBuffEffect(buffHealthPrefab, healAmount);
                 }
                 else
                 {
+                    AudioManager.SharedInstance.PlaySound(CantPickPotionSFX);
                     pickUpItem = false;
                 }
                 break;
@@ -56,12 +65,15 @@ public class ItemManager : MonoBehaviour
             case ItemType.BigPotion:
                 if (player.GetPlayer().CurrentHealth < player.GetPlayer().MaxHealth)
                 {
+                    AudioManager.SharedInstance.PlaySound(DrinkPotionSFX);
                     int bigHealAmount = CalculateHealAmount(16, 8);
+                    ShowBuffEffect(buffHealthPrefab, player.GetPlayer().RealHeal(bigHealAmount));
                     player.Heal(bigHealAmount);
-                    ShowBuffEffect(buffHealthPrefab, bigHealAmount);
+                    
                 }
                 else
                 {
+                    AudioManager.SharedInstance.PlaySound(CantPickPotionSFX);
                     pickUpItem = false;
                 }
                 break;
@@ -69,17 +81,20 @@ public class ItemManager : MonoBehaviour
             case ItemType.Sword:
                 int attackBonus = UnityEngine.Random.Range(0, 80) > 70 ? 2 : 1; // + playerData.Luck
                 player.IncreaseAttack(attackBonus);
+                AudioManager.SharedInstance.PlaySound(SwordPickSFX[UnityEngine.Random.Range(0, SwordPickSFX.Count)]);
                 ShowBuffEffect(buffAttackPrefab, attackBonus);
                 break;
 
             case ItemType.Coin:
                 int goldAmount = CalculateGoldAmount();
                 DungeonGameManager.Instance.PickUpGold(goldAmount);
+                AudioManager.SharedInstance.PlaySound(CoinPickSFX[UnityEngine.Random.Range(0, CoinPickSFX.Count)]);
                 ShowBuffEffect(buffCoinsPrefab, goldAmount);
                 break;
 
             case ItemType.Chest:
                 player.AddItem(ItemType.Chest);
+                AudioManager.SharedInstance.PlaySound(PickChestSFX);
                 OnPickupKeyChest?.Invoke(ItemType.Chest, true);
                 //HandleChest();
                 break;
@@ -107,15 +122,14 @@ public class ItemManager : MonoBehaviour
 
     private void HandleChest()
     {
-        var playerData = DungeonGameManager.Instance.playerData;
 
-        if (playerData.CanGetItemFromGame())
+        if (UserData.SharedInstance.CanGetItemFromGame())
         {
-            playerData.GetItemFromChest();
+            UserData.SharedInstance.GetItemFromChest();
         }
         else
         {
-            playerData.Gold += Mathf.Min(2, 5);
+            UserData.SharedInstance.Gold += Mathf.Min(2, 5);
             ShowBuffEffect(buffCoinsPrefab, 100);
         }
     }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public static class WeaponEffectCalculator
 {
-    public static float GetDamageMultiplier(int weaponId, Enemy enemy)
+    public static float GetDamageMultiplier(int weaponId, Enemy enemy, bool Boost)
     {
         switch (weaponId)
         {
@@ -14,12 +14,18 @@ public static class WeaponEffectCalculator
                 return enemy.TypeOfEnemy == Specie.Demon ? 1.4f : 1f;
             case 10: // Enhanced weapon
                 return 1.25f;
+            case 11:
+                return Boost ? 2f : 1f;
+            case 12:
+                return Boost ? 1.2f : 1f;
             case 15: // Beast hunter
                 return enemy.TypeOfEnemy == Specie.Beast ? 1.4f : 1f;
             case 16: // Power weapon
                 return 1.75f;
             case 17: // Versatile weapon
                 return 1.1f;
+            case 19:
+                return 1.5f;
             default:
                 return 1f;
         }
@@ -27,8 +33,11 @@ public static class WeaponEffectCalculator
 
     public static void ApplyStatusEffects(int weaponId, Enemy enemy)
     {
-        switch (weaponId)
-        {
+
+        //Poner aqui un porcentaje para aplicarlo como probabilidad
+
+        switch (weaponId) {
+
             case 1: // Fire weapon
                 enemy.TryToAddState(StateOfCharacter.Fired);
                 break;
@@ -47,25 +56,32 @@ public static class WeaponEffectCalculator
             case 8: // Blessed weapon
                 enemy.TryToAddState(StateOfCharacter.Blessing);
                 break;
+            case 11: // Cursed weapon
+                enemy.TryToAddState(StateOfCharacter.Cursed);
+                break;
+            case 12: // Rose Katana
+                enemy.TryToAddState(StateOfCharacter.Bleeding);
+                break;
             case 13: // Dual element weapon
                 enemy.TryToAddState(StateOfCharacter.Fired);
                 enemy.TryToAddState(StateOfCharacter.Freezed);
                 break;
-            case 18: // Bleeding weapon
+            case 18: // Pochita Chainsaw
                 enemy.TryToAddState(StateOfCharacter.Bleeding);
                 break;
         }
     }
 
-    public static int ApplyDefensiveEffects(int weaponId, int incomingDamage, Enemy enemy)
+    public static int ApplyDefensiveEffects(int weaponId, int incomingDamage, Enemy enemy, CombatResult result)
     {
         switch (weaponId)
         {
             case 4: // Dueltist Sword
-                bool isEnemyAlive = enemy.Health <= 0;
+                bool isEnemyDead = result.enemyDefeated;
                 bool iEvadedAttack = Random.Range(0, 100) < 10;
+                if (iEvadedAttack) DungeonGameManager.Instance.HandleBlockSound();
 
-                return (iEvadedAttack || isEnemyAlive) ? 0 : incomingDamage;
+                return (iEvadedAttack || isEnemyDead) ? 0 : incomingDamage;
             case 16: // Glass cannon
                 return Mathf.FloorToInt(incomingDamage * 1.5f);
             case 19: // Defensive weapon
@@ -75,8 +91,10 @@ public static class WeaponEffectCalculator
         }
     }
 
-    public static void OnKillEffect(int weaponId, PlayerStats player, Enemy enemy, CombatResult result)
+    public static bool OnKillEffect(int weaponId, PlayerStats player, Enemy enemy, CombatResult result)
     {
+
+        bool boostForNext = false;
 
         switch (weaponId)
         {
@@ -86,7 +104,15 @@ public static class WeaponEffectCalculator
                     player.Heal(Mathf.FloorToInt(player.CurrentHealth * 0.1f));
                 }
                 break;
+            case 11:
+                boostForNext = enemy.TypeOfEnemy == Specie.Demon;
+                break;
+            case 16:
+                if (result.enemyDefeated) player.Heal(Mathf.FloorToInt(player.CurrentHealth * 0.1f));
+                break;
         }
+
+        return boostForNext;
 
     }
 }

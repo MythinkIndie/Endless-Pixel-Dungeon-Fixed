@@ -23,8 +23,11 @@ public class MainMenuSettings : MonoBehaviour {
     [SerializeField] private GameObject SettingGlobalCanva;
     [SerializeField] private RectTransform BackgroundSettings;
     [SerializeField] private RectTransform AllSettingOptions;
-    
-    void Start() {
+
+    [SerializeField] private AudioClip MenuMusic;
+
+    void Start()
+    {
 
         SettingGlobalCanva.SetActive(false);
         BackgroundSettings.transform.localPosition = new Vector3(0, -2000, 0);
@@ -33,7 +36,7 @@ public class MainMenuSettings : MonoBehaviour {
         MusicSlider.value = DatosUser.MusicVolume;
         fbxSlider.value = DatosUser.FbxVolume;
         textSpeedSlider.value = DatosUser.TextSpeed;
-        
+
         ChangeUserData(1);
         ChangeUserData(2);
 
@@ -43,6 +46,8 @@ public class MainMenuSettings : MonoBehaviour {
 
         PutSettings.onClick.AddListener(AnimationUpSettings);
         ExitSettings.onClick.AddListener(AnimationDownSettings);
+
+        AudioManager.SharedInstance.PlayMusic(MenuMusic, true);
         
     }
 

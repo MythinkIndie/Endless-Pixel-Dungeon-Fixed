@@ -25,8 +25,12 @@ public class BoardManager : MonoBehaviour
 
     // Events
     public Action<Cell> OnCellRevealed;
+    public Action<Cell> OnCellInteraction;
     public Action<Enemy> NewEnemyRevelated;
     public Action<Vector2Int> OnCellClicked;
+
+    [SerializeField] private List<AudioClip> EnemyApparenceSFX;
+    [SerializeField] private List<AudioClip> DiscoverTileSFX;
 
     public void Initialize()
     {
@@ -77,7 +81,7 @@ public class BoardManager : MonoBehaviour
 
     public void HandleCellClick(Vector2Int position)
     {
-        
+
         var cell = GetCell(position);
 
         if (cell == null || !CanRevealCell(cell)) return;
@@ -100,13 +104,20 @@ public class BoardManager : MonoBehaviour
                 cell.Enemy.Position = cell.Pos;
                 NewEnemyRevelated?.Invoke(cell.Enemy);
                 LockAdjacentCells(cell.Pos);
+                AudioManager.SharedInstance.PlaySound(EnemyApparenceSFX[UnityEngine.Random.Range(0, DiscoverTileSFX.Count)]);
             }
+            else
+            {
+                AudioManager.SharedInstance.PlaySound(DiscoverTileSFX[UnityEngine.Random.Range(0, DiscoverTileSFX.Count)]);
+                OnCellRevealed?.Invoke(cell);
+            }
+
         }
         else
         {
-            //Si hay ibjeti debajo del enemigo no pillarlo
+            //Si hay objeto debajo del enemigo no pillarlo
             tileRenderer.RenderCell(cell);
-            OnCellRevealed?.Invoke(cell); 
+            OnCellInteraction?.Invoke(cell);
 
         }
 
@@ -208,13 +219,22 @@ public class BoardManager : MonoBehaviour
     }
 
     public void RenderEntrance()
-    { 
+    {
         var entrance = board.Find(c => c.Type == CellType.Entrance);
         if (entrance != null)
         {
             tileRenderer.RenderCell(entrance);
         }
     }
+
+    public void RemoveEnemyFrom(Vector2Int pos)
+    {
+
+        var cell = board.Find(c => c.Pos == pos);
+        if (cell != null) cell.Enemy = null;
+
+    }
+    
 }
 
 [Serializable]

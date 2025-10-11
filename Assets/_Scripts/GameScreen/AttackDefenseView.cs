@@ -12,15 +12,18 @@ public class AttackDefenseView : MonoBehaviour {
 
     public Vector2Int BoardPos = Vector2Int.zero;
 
+    public Enemy _enemy;
+
     bool _hideOnDone = false;
 
-    public void SetData(int attack, int health, Sprite enemy, bool flash = false) {
+    public void SetData(Enemy enemy, bool flash = false) {
 
         StopAllCoroutines();
-        Attack = attack;
-        Health = health;
-        EnemyPrint.GetComponent<Image>().sprite = enemy;
-        _hideOnDone = health < 1;
+        _enemy = enemy;
+        Attack = _enemy.Attack;
+        Health = _enemy.Health;
+        EnemyPrint.GetComponent<Image>().sprite = _enemy.EnemySprite;
+        _hideOnDone = Health < 1;
         var col = Color.red;
         col.a = 0f;
         Flash.color = col;

@@ -14,6 +14,7 @@ public class EnemyManager : MonoBehaviour
     private List<EnemyPrefabListItem> enemyListItems = new List<EnemyPrefabListItem>();
 
     public System.Action<Enemy> OnEnemyDefeated;
+    public System.Action<CombatResult, Enemy> OnStatusKillEnemy;
 
     public void Initialize()
     {
@@ -38,9 +39,9 @@ public class EnemyManager : MonoBehaviour
         enemyUI.gameObject.SetActive(true);
         enemyUI.transform.position = new Vector3(enemy.Position.x - 0.075f, enemy.Position.y, 0);
         enemyUI.BoardPos = enemy.Position;
-        enemyUI.SetData(enemy.Attack, enemy.Health, enemy.EnemySprite, false);
+        enemyUI.SetData(enemy);
 
-        
+
     }
 
     private AttackDefenseView GetAvailableEnemyUI()
@@ -63,25 +64,25 @@ public class EnemyManager : MonoBehaviour
     {
         // Create list item
         var listItem = Instantiate(enemyListItemPrefab, enemyListParent);
-        listItem.SetData(enemyUIList.Find(ui => ui.BoardPos == enemy.Position), enemy.Position.x, enemy.Position.y, -1, enemy.HasArmor());
+        listItem.SetData(enemyUIList.Find(ui => ui.BoardPos == enemy.Position)._enemy, -1);
         enemyListItems.Add(listItem);
 
     }
 
-    public void UpdateEnemyUI(Cell cell, int damage)
+    public void UpdateEnemyUI(Enemy enemy, int damage)
     {
-        var enemyUI = enemyUIList.Find(ui => ui.BoardPos == cell.Enemy.Position);
+        var enemyUI = enemyUIList.Find(ui => ui.BoardPos == enemy.Position);
         if (enemyUI != null)
         {
-            cell.Enemy.Health = Mathf.Max(0, cell.Enemy.Health - damage);
-            enemyUI.SetData(cell.Enemy.Attack, cell.Enemy.Health, cell.Enemy.EnemySprite, true);
+            enemy.Health = Mathf.Max(0, enemy.Health - damage);
+            enemyUI.SetData(enemy, true);
         }
 
-        var listItem = enemyListItems.Find(item => item.x == cell.Enemy.Position.x && item.y == cell.Enemy.Position.y);
+        var listItem = enemyListItems.Find(item => item.x == enemy.Position.x && item.y == enemy.Position.y);
         if (listItem != null)
         {
-            int stateId = cell.Enemy.States.Count > 0 ? (int)cell.Enemy.States[0] : -1;
-            listItem.SetData(enemyUI, cell.Enemy.Position.x, cell.Enemy.Position.y, stateId, cell.Enemy.HasArmor());
+            int stateId = enemy.States.Count > 0 ? (int)enemy.States[0] : -1;
+            listItem.SetData(enemyUI._enemy, stateId);
         }
     }
 
@@ -122,6 +123,17 @@ public class EnemyManager : MonoBehaviour
                 Destroy(item.gameObject);
         }
         enemyListItems.Clear();
+    }
+
+    public void ApplyStatusEffects()
+    {
+        //Lista de todos los enemigos que tengan efecto de estado y sacar el combat result
+        foreach (Enemy e in activeEnemies.FindAll(_e => _e.States.Count > 0))
+        {
+            var result = CombatSystem.CalculateStatusDamage(e);
+            OnStatusKillEnemy?.Invoke(result, e);
+        }
+
     }
 }
 

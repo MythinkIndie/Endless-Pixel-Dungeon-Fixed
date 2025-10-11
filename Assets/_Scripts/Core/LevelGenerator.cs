@@ -103,7 +103,7 @@ public static class LevelGenerator
         
         for (int i = 0; i < enemyCount; i++)
         {
-            var available = cells.FindAll(c => c.Type == CellType.Empty && c.Item != ItemType.Exit);
+            var available = cells.FindAll(c => c.Type == CellType.Empty && c.Item != ItemType.Exit && c.Enemy == null);
             if (available.Count > 0)
             {
                 var cell = available[Random.Range(0, available.Count)];

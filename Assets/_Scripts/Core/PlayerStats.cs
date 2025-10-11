@@ -24,6 +24,11 @@ public class PlayerStats
     {
         CurrentHealth = Mathf.Max(0, CurrentHealth - damage);
     }
+
+    public int RealHeal(int amount)
+    {
+        return Mathf.Min(CurrentHealth + amount, MaxHealth) - CurrentHealth;
+    }
     
     public void Heal(int amount)
     {

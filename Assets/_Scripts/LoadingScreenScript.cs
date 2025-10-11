@@ -1,70 +1,74 @@
-// using System.Collections;
-// using System.Collections.Generic;
-// using UnityEngine;
-// using UnityEngine.UI;
-// using UnityEngine.SceneManagement;
+using System;
+using System.Collections;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.SceneManagement;
 
-// public class LoadingScreenScript : MonoBehaviour {
+public class LoadingScreenScript : MonoBehaviour {
 
-//     [SerializeField] private Slider screenProgressBar;
-//     [SerializeField] private GameObject loginBarGO;
-//     [SerializeField] private GameObject usernameBarGO;
-//     [SerializeField] private Button ConfirmUsernameBtn;
-//     [SerializeField] private TMPro.TMP_InputField usernameInput;
+    [SerializeField] private Slider screenProgressBar;
+    [SerializeField] private GameObject loginBarGO;
+    [SerializeField] private GameObject usernameBarGO;
+    [SerializeField] private Button ConfirmUsernameBtn;
+    [SerializeField] private TMPro.TMP_InputField usernameInput;
 
-//     void Start() {
+    void Start()
+    {
 
-//         loginBarGO.SetActive(false);
-//         usernameBarGO.SetActive(false);
+        loginBarGO.SetActive(false);
+        usernameBarGO.SetActive(false);
 
-//         ConfirmUsernameBtn.onClick.AddListener(SetUpUsernameData);
-//         StartCoroutine(MyStartCoroutine());
+        ConfirmUsernameBtn.onClick.AddListener(SetUpUsernameData);
+        StartCoroutine(MyStartCoroutine());
 
-//     }
+        AudioManager.SharedInstance.StopMusic();
 
-//     IEnumerator MyStartCoroutine() {
+    }
 
-//         yield return new WaitUntil(() => PlayFabController.PFC.GetUserData());
+    IEnumerator MyStartCoroutine() {
 
-//         if (UserData.SharedInstance.Username == "") {
+        // yield return new WaitUntil(() => PlayFabController.PFC.GetUserData());
 
-//             usernameBarGO.SetActive(true);
-//             yield break;
+        if (UserData.SharedInstance.Username == "") {
 
-//         } else {
+            usernameBarGO.SetActive(true);
+            yield break;
 
-//             StartCoroutine(LoadNextScene());
+        } else {
 
-//         }
+            StartCoroutine(LoadNextScene());
 
-//     }
+        }
 
-//     void SetUpUsernameData() {
+    }
 
-//         if (usernameInput.text.Trim() != "" && usernameInput.text.Trim().Length < 14) {
+    void SetUpUsernameData() {
 
-//             UserData.SharedInstance.Username = usernameInput.text.Trim();
-//             PlayFabController.PFC.SetPlayfabUserData();
-//             StartCoroutine(LoadNextScene());
+        if (usernameInput != null && !string.IsNullOrWhiteSpace(usernameInput.text) && usernameInput.text.Trim().Length < 14 && usernameInput.text.Trim().Length > 3) {
 
-//         }
+            UserData.SharedInstance.Username = usernameInput.text.Trim();
+            // PlayFabController.PFC.SetPlayfabUserData();
+            StartCoroutine(LoadNextScene());
 
-//     }
+        }
 
-//     IEnumerator LoadNextScene() {
+    }
 
-//         loginBarGO.SetActive(true);
-//         usernameBarGO.SetActive(false);
+    IEnumerator LoadNextScene() {
 
-//         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(UserData.SharedInstance.SceneToGo);
+        loginBarGO.SetActive(true);
+        usernameBarGO.SetActive(false);
 
-//         while (!asyncLoad.isDone) {
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync(UserData.SharedInstance.SceneToGo);
 
-//             screenProgressBar.value = asyncLoad.progress * 100;
-//             yield return null;
+        while (!asyncLoad.isDone) {
 
-//         }
+            screenProgressBar.value = asyncLoad.progress;
+            yield return null;
 
-//     }
+        }
 
-// }
+    }
+
+}

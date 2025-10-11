@@ -62,7 +62,7 @@ public class SolarBeamSkill : ISkill {
             int damage = Mathf.FloorToInt(playerManager.GetPlayer().Attack * 0.75f);
             cell.Enemy.Health = Mathf.Max(0, cell.Enemy.Health - damage);
             
-            DungeonGameManager.Instance.enemyManager.UpdateEnemyUI(cell, damage);
+            DungeonGameManager.Instance.enemyManager.UpdateEnemyUI(cell.Enemy, damage);
             
             if (cell.Enemy.Health <= 0)
             {
