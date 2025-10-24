@@ -33,7 +33,7 @@ public class ItemManager : MonoBehaviour
         activeItems.AddRange(items);
     }
 
-    public void CollectItem(Cell cell)
+    public bool CollectItem(Cell cell)
     {
         var player = DungeonGameManager.Instance.playerManager;
         bool pickUpItem = true;
@@ -107,6 +107,7 @@ public class ItemManager : MonoBehaviour
         // Clear item from cell
         cell.Item = pickUpItem? ItemType.None : cell.Item;
         OnItemCollected?.Invoke(originalCell, cell.Pos);
+        return pickUpItem;
     }
 
     private int CalculateHealAmount(int base_, int variance)

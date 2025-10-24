@@ -107,6 +107,8 @@ public class DungeonGameManager : MonoBehaviour
     private void HandleCellRevealed(Cell cell)
     {
 
+        bool IsValidPickup = true;
+
         if (cell.Enemy != null)
         {
             // Handle enemy encounter
@@ -117,23 +119,28 @@ public class DungeonGameManager : MonoBehaviour
         else if (cell.Item != ItemType.None)
         {
             // Handle item pickup
-            itemManager.CollectItem(cell);
+            IsValidPickup = itemManager.CollectItem(cell);
         }
 
-        HandleScenaryEffects(cell);
-
+        HandleScenaryEffects(cell, IsValidPickup);
         
     }
 
-    private void HandleScenaryEffects(Cell cell)
+    private void HandleScenaryEffects(Cell cell, bool IsValidPickup)
     {
 
         //Aqui se pueden actualizar las particulas para clicar
         enemyManager.ApplyStatusEffects();
 
+        if (IsValidPickup)
+        {
+            skillManager.TryReduceSkillTimer(TimerReducer.OnTileDiscover);
+        }
+        
+
     }
 
-    private void HandleCombatResult(CombatResult result, Enemy enemy)
+    public void HandleCombatResult(CombatResult result, Enemy enemy)
     {
 
         playerManager.TakeDamage(result.playerDamageRecived);
@@ -144,6 +151,7 @@ public class DungeonGameManager : MonoBehaviour
         {
             enemyManager.RemoveEnemy(enemy);
             enemy = null;
+            skillManager.TryReduceSkillTimer(TimerReducer.onKill);
         }
         else
         {

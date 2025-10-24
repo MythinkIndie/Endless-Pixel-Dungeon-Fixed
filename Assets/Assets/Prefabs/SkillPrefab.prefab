@@ -70,9 +70,9 @@ MonoBehaviour:
   m_Type: 3
   m_PreserveAspect: 0
   m_FillCenter: 1
-  m_FillMethod: 1
+  m_FillMethod: 4
   m_FillAmount: 1
-  m_FillClockwise: 1
+  m_FillClockwise: 0
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
@@ -288,7 +288,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 81dc0576d65c03b4ebe2f2d4b307db8c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  skill: 0
   skillsImageList:
   - {fileID: 21300000, guid: 8345843fe1778a74e82449f40c786f70, type: 3}
   - {fileID: 21300000, guid: 4f5236096f251284cbaa8722694c0d93, type: 3}
@@ -301,4 +300,4 @@ MonoBehaviour:
   - {fileID: 21300000, guid: 8d78ef1c1839b894a8460048d34d3482, type: 3}
   SkillImage: {fileID: 3207808760479858235}
   CooldownImageAlpha: {fileID: 4470303825107598400}
-  MaxCooldownList: 040000000400000004000000040000000400000004000000040000000400000004000000
+  InternButtonSkill: {fileID: 0}

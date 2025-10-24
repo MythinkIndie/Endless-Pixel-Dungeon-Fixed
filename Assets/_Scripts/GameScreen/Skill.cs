@@ -5,39 +5,22 @@ using UnityEngine.UI;
 
 public class Skill : MonoBehaviour {
     
-    public int skill;
+    private ISkill skill;
     [SerializeField] private List<Sprite> skillsImageList;
     [SerializeField] private Image SkillImage;
     [SerializeField] private Image CooldownImageAlpha;
-    [SerializeField] private List<int> MaxCooldownList;
-    private Button InternButtonSkill;
+    public Button InternButtonSkill;
     private int cooldown;
     private int maxCooldownOfSkill;
-    private bool isSkillSelected;
 
     //El cooldown estará aqui ya preconfigurado
-    public void SetSkillData(int itemID, int imageSelector) {
-
-        InternButtonSkill = this.GetComponent<Button>();
-        SkillImage.sprite = skillsImageList[imageSelector];
-        skill = itemID;
-        cooldown = 0;
-        maxCooldownOfSkill = MaxCooldownList[itemID];
-        isSkillSelected = false;
-        //InternButtonSkill.onClick.AddListener();
+    public void SetSkillData(ISkill skill) {
+        
+        SkillImage.sprite = skillsImageList[skill.SkillId];
+        this.skill = skill;
+        cooldown = skill.cooldown;
+        maxCooldownOfSkill = skill.maxCooldown;
         UpdateIconCooldown();
-
-    }
-
-    public bool IsSkillSelected {
-
-        get {
-            return this.isSkillSelected;
-        }
-
-        set {
-            this.isSkillSelected = value;
-        }
 
     }
 
@@ -54,16 +37,16 @@ public class Skill : MonoBehaviour {
 
     }
 
-    public void SetCooldownSkillCountdown() {
+    public void SetCooldownSkillCountdown(int newCooldown) {
 
-        cooldown -= 1;
+        cooldown = newCooldown;
         UpdateIconCooldown();
 
     }
 
     private void UpdateIconCooldown() {
 
-        CooldownImageAlpha.fillAmount = cooldown / maxCooldownOfSkill;
+        CooldownImageAlpha.fillAmount = (float)cooldown / maxCooldownOfSkill;
 
     }
     

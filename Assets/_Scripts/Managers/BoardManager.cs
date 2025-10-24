@@ -21,10 +21,11 @@ public class BoardManager : MonoBehaviour
 
     // Board state
     private List<Cell> board = new List<Cell>();
+    public List<Cell> Board { get => board; }
     private ITileRenderer tileRenderer;
 
     // Events
-    public Action<Cell> OnCellRevealed;
+    public Action<Cell, bool> OnCellRevealed;
     public Action<Cell> OnCellInteraction;
     public Action<Enemy> NewEnemyRevelated;
     public Action<Vector2Int> OnCellClicked;
@@ -109,7 +110,7 @@ public class BoardManager : MonoBehaviour
             else
             {
                 AudioManager.SharedInstance.PlaySound(DiscoverTileSFX[UnityEngine.Random.Range(0, DiscoverTileSFX.Count)]);
-                OnCellRevealed?.Invoke(cell);
+                OnCellRevealed?.Invoke(cell, true);
             }
 
         }

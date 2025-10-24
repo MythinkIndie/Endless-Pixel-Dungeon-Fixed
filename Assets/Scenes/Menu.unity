@@ -2175,6 +2175,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 1172338d7c29da84b85f79cb3eeb55f4, type: 2}
   - {fileID: 11400000, guid: 39915ac0150c4c04a98eecfdc97542aa, type: 2}
   - {fileID: 11400000, guid: 1c9b7612c4544324f829c0b7a8c2f8c7, type: 2}
+  - {fileID: 11400000, guid: fcbbb500ef8a66e4ba9cb7ee5c775491, type: 2}
+  - {fileID: 11400000, guid: fc39f82130b6a094b93062ee012e9c24, type: 2}
+  - {fileID: 11400000, guid: a1703b2fd69986a4eb764ae7275fb8e3, type: 2}
   ToGetInGameItems:
   - {fileID: 11400000, guid: e2466e422825f9149a5f20f039755641, type: 2}
   - {fileID: 11400000, guid: 8afad394f541942498f218e84a94b7f3, type: 2}

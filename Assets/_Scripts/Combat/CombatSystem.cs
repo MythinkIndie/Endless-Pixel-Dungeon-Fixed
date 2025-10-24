@@ -22,9 +22,9 @@ public static class CombatSystem
         return result;
     }
 
-    private static int CalculatePlayerDamage(PlayerStats player, Enemy enemy, bool Boost)
+    private static int CalculatePlayerDamage(PlayerStats player, Enemy enemy, bool Boost, float mutliplier = 1f)
     {
-        int baseDamage = player.Attack;
+        int baseDamage = Mathf.RoundToInt(player.Attack * mutliplier);
 
         // Apply weapon effects
         float weaponMultiplier = WeaponEffectCalculator.GetDamageMultiplier(player.WeaponId, enemy, Boost);
@@ -67,6 +67,24 @@ public static class CombatSystem
 
         return result;
 
+    }
+
+    public static CombatResult ProcessSkillCombat(PlayerStats player, Enemy enemy, bool Boost, float mutliplier = 1f)
+    {
+        var result = new CombatResult();
+
+        // Calculate player damage to enemy
+        int playerDamage = CalculatePlayerDamage(player, enemy, Boost, mutliplier);
+        //enemy.Health = Mathf.Max(0, enemy.Health - playerDamage);
+        result.enemyDamageRecived = playerDamage;
+        result.enemyDefeated = (enemy.Health - playerDamage) <= 0;
+
+        result.playerBoostForNextAttack = WeaponEffectCalculator.OnKillEffect(player.WeaponId, player, enemy, result);
+
+        // Calculate enemy damage to player (or 0)
+        result.playerDamageRecived = 0;
+
+        return result;
     }
 }
 
